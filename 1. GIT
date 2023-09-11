@@ -1,0 +1,98 @@
+DAY-01: 11-09-2023
+
+GIT:
+
+
+APPLICATION: it is combination of services.
+its a software.
+
+GIT: GLOBAL INFROMATION TRACKER
+VCS: version control system.
+SCM: source code management.
+
+VCS: it will store each version code seperately.
+
+PAYTM:
+V1 -- > 3 SERVICES -- > 300 LINES (REPO-1)
+V2 -- > 4 SERVICES -- > 400 LINES (REPO-2)
+V3 -- > 5 SERVICES -- > 500 LINES (REPO-3)
+
+WHY TO MAINTAIN CODE SEPERATELY:
+ROLLBACK: GOING BACK TO PREVIOUS VERSION
+
+V1 -- > INDEX.HTML -- > 100
+V2 -- > INDEX.HTML -- > 110
+V3 -- > INDEX.HTML -- > 140
+
+GIT:
+Git is used to track the files.
+It will maintain multiple versions of the same file.
+It is platform-independent.
+It is free and open-source.
+They can handle larger projects efficiently.
+It is 3rd generation of vcs.
+it is written on c programming.
+it came on the year 2005.
+
+
+CVCS: CENTRALIZED VERSION CONTROL SYSTEM
+we can store code on single repo.
+EX: svn
+
+DVCS: DISTRIBUTED VERSION CONTROL SYSTEM
+we can store code on multiple repos.
+EX: Git
+
+GIT ARCHITECTURE:
+we have 3 stages
+
+1. WORKING DIRECTORY: where we write code.
+2. STAGING AREA: where we track code.
+3. REPOSITORY: where we store tacked code.
+
+
+WORKING:
+create an ec2 instance
+
+mkdir insta
+cd insta
+
+yum install git -y	: to install git
+git init		: to set local repo (.git)
+
+Note: without .git we cant run any commands of git
+
+touch file1		: to create a file
+git add file1		: to track file
+git commit -m "ver-1" file1 : to save the tracked file
+git status		: to see status of file
+git log			: to see commits history
+git log --oneline	: to see commits history in single line
+
+HISTORY:
+ 1  mkdir insta
+    2  cd insta/
+    3  yum install git -y
+    4  ll -a
+    5  git init
+    6  ll -a
+    7  touch file1
+    8  git status
+    9  git add file1
+   10  git status
+   11  git commit -m "ver-1" file1
+   12  ll
+   13  git status
+   14  touch index.html
+   15  git add index.html
+   16  git commit -m "v-1" index.html
+   17  touch file2
+   18  git status
+   19  git add file2
+   20  git status
+   21  git commit -m "abc" file2
+   22  ll
+   23  git status
+   24  git log
+   25  git log --oneline
+   26  history
