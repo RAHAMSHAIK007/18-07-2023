@@ -1,0 +1,194 @@
+MODES OF OS:
+1. GUI	: GRAPHICAL USER INTERFACE
+2. CLI	: COMMAND LINE INTERFACE
+
+LINUX COMMANDS:
+shortcuts:
+
+ctrl l		: to clear screen
+
+FILE COMMANDS:
+sudo -i		: to switch to root user
+touch file1	: to create a file
+ls/ll		: to list the files
+cat file1	: to see content 
+more file1	: to see content 
+cat>>file1	: to insert the content
+enter ctrl d	: to save the content
+wc		: to show number of lines, words and charcters
+cp file1 file2	: to copy the content from file1 to file2
+mv file1 file5	: to rename a file and to move
+rm file1	: to remove file
+rm file1 -f	: to remove file forecfully
+rm * -f		: to remove all files forecfully
+touch file{1..10}: to create 10 files at same time
+head file1	: to print top 10 lines of file
+head -5 file1	: to print top 5 lines of file
+head -12 file1	: to print top 12 lines of file
+tail file1	: to print bottom 10 lines of file
+tail -5 file1	: to print bottom 5 lines of file
+tail -12 file1	: to print bottom 12 lines of file
+sed -n '5,14p' file1: to print lines form 5 to 14
+sed -n '7,12p' file1: to print lines form 7 to 12
+
+mkdir raham	: to create a folder
+cd raham	: to go to raham folder
+pwd		: print working directory
+cd ..		: to come back one folder
+
+=========================================================================
+
+EDITORS: to edit and insert the content in a file
+1. vim / vi
+2. nano
+
+i	: to insert content
+ecs	: to exit from inserting content
+
+3. save mode:
+:w	: to save
+:q	: to quit
+:wq	: to save and quit
+:wq!	: to save and quit forcefully
+
+2. insert mode:
+i	: to insert content
+0	: starting of line
+$	: ending of line
+O	: to create new line above existing line
+o	: to create new line below existing line
+
+1. command mode:
+gg	: starting of file
+shift g	: ending of file
+yy	: to copy single line
+4yy	: to copy four lines
+p	: to paste single line
+4pp	: to paste four times
+dd	: to delete single line
+5dd	: to delete five lines
+u	: to undo
+ctrl r	: to redo
+:100	: to go line 100
+:70	: to go line 70
+/word	: to search for a word
+:set number: to show line numbers
+
+=====================================================================================
+
+HARDWARE COMMANDS:
+
+cat /proc/cpuinfo	: to show cpu information
+lscpu			: to show cpu information
+cat /proc/meminfo	: to show ram information
+lsmem			: to show ram information
+fdisk -l		: to show ebs volume information
+lsblk			: to show ebs volume information
+df/df -m		: to show mounted list
+free -m/free -h		: to show how much ram is available
+top			: to print the process
+dmseg			: to print kerenl messages
+lshw			: to print complete hardware information
+yum install lshw -y
+
+cat file1>>file2
+ln -s dir1/raham abc
+=====================================================================================
+PERMISSIONS:
+
+-rw-r--r-- 1 root root 0 Sep  7 15:37 file1
+
+FILE TYPES:
+- 	: regular file
+b	: blocked file
+c	: charcter file
+d	: directory
+l	: link files
+
+PERMISSIONS: (rw-r--r--)
+read	: r	: 4
+write	: w	: 2
+executable: x	: 1
+
+user	:rw- : 6
+group	:r-- : 4
+others	:r-- : 4
+
+NUMERICAL: chmod 766 file1
+ALPHABETICAL: chmod u=rwx,g=rx,o=w file1
+
+USER: 
+to login to server
+default user when we login to server ec2-user
+we dont have all powers to work with ec2-user
+so we can create our own users and work with them
+root user is the admin.
+
+useradd raham		: to create user
+cat /etc/passwd		: to list users
+cat /etc/group		: to list group
+ll /home		: to show home folder for raham
+passwd raham		: to set password
+su - raham		: to login as raham user
+ctrl d			: to logout
+groupadd devops		: to create devops group
+usermod -a -G devops raham: to add raham user to devops group
+gpasswd -d raham devops	: to remove raham user to devops group
+id raham		: to show raham user details
+userdel raham		: to delete raham user
+groupdel aws		: to delete aws group
+
+chown raham file1	: to make raham as owner for file1
+chgrp raham file1	: to make raham as group for file1
+chown raham:raham file1	: to attach onwer and group both
+
+TYPES:
+DEFAULT: user used to login to server
+ROOT   : He is admin
+NON ROOT USER: he is a normal user without permissions
+SUDO USER: normal user who is in sudo file
+
+create user -- > visudo -- > 100 -- >yy p -- > name -- > save
+
+====================================================================================
+
+GREP: GLOBAL REGULAR EXPRESSION PRINT
+to search words in a file
+
+grep linux file1
+grep Linux file1 -i
+grep LINUX file1 -i
+
+-i	: to aviod case sensitive
+-c	: count
+-v	: to avoid the words
+
+grep 'hyderabad\|class' file1	: to search multiple words
+grep 'hyderabad\|class\|for\|linux' file1
+grep all file1 file2
+grep all *
+
+cat file1 | grep raham : to search word using pipe 
+cat /proc/meminfo | grep active -i | head -1
+it prints mem info | search for active | prints only active 1st time
+
+SED: STREAM EDITOR
+To replace the words in a file
+
+sed 's/linux/unix/' file1	: to replace and print linux with unix
+sed -i 's/unix/linux/g' file1	: to replace and reflect unix with linux
+sed -i '4c abc' file1		: to change line 4
+:%s/unix/linux/g
+sed -i 's/unix/linux/; s/hyderabad/mumbai/' file1 : to replace multiple words
+sed -i '4s/linux/unix/' file1  : to replace word on 4th line only
+sed -i 's/linux/unix/2' file1  : to replace word 2nd word only
+
+NETWORK COMMANDS:
+ifconfig/ ip addr/ ip addr show / hostname -i 
+ping		: to check server response
+wget		: to download files from internet
+ps aux		: to list all process
+ps -A		: to list all process
+netstat
+netstat -a
+netstat -tulpn
