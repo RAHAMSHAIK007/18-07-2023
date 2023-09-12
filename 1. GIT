@@ -96,3 +96,98 @@ HISTORY:
    24  git log
    25  git log --oneline
    26  history
+====================================================
+DAY-02: 12-09-2023
+BRANCHES, GITHUB
+
+BRANCHES:
+its an individual line of development.
+each developer will write the code on different branches.
+the default branch in git is master.
+we can do pull, push and fetch activies with branches.
+NOTE: if we want to see a branch we need to do inital commit.
+
+git branch		: to list branches
+git branch branch_name	: to create new branche
+git checkout branch_name: to switch blw branches
+git checkout -b dth	: to create and switch at same time
+
+create branch -- > create files -- > add -- > commit
+
+GITHUB:
+its a remote repo.
+we can store source code on internet.
+if we delete code on local we can get from github.
+we can merge code of multiple developers.
+
+ 1  mkdir paytm
+    2  cd paytm/
+    3  yum install git -y
+    4  ll -a
+    5  git status
+    6  git init
+    7  ll -a
+    8  git status
+    9  ll
+   10  ll -
+   11  ll -a
+   12  git branch
+   13  vim index.html
+   14  git add index.html
+   15  git status
+   16  git commit -m "v-1" index.html
+   17  git branch
+   18  git branch movies
+   19  git branch
+   20  git checkout movies
+   21  git branch
+   22  touch movies{1..5}
+   23  git add movies*
+   24  git commit -m "dev-1" movies*
+   25  ll
+   26  git branch train
+   27  git checkout train
+   28  ll
+   29  touch train{1..5}
+   30  git add train*
+   31  git commit -m "dev-2" train*
+   32  git branch
+   33  git checkout -b dth
+   34  git branch
+   35  ll
+   36  touch dth{1..5}
+   37  git add dth*
+   38  git commit -m "dev-3" dth*
+   39  git checkout -b recharge
+   40  ll
+   41  touch recharge{1..5}
+   42  git add recharge*
+   43  git commit -m "dev-4" recharge*
+   44  git checkout master
+   45  ll
+   46  git checkout -b raham
+   47  ll
+   48*
+   49  ll -a
+   50  git checkout master
+   51  ll
+   52  git push origin master
+   53  git push origin movies
+   54  git push origin train
+   55  git push origin dth
+   56  git push origin recharge
+   57  cd
+   58  ll
+   59  rm -rf paytm/
+   60  ll
+   61  git clone https://github.com/raghavamakkena86/paytm.git
+   62  ll
+   63  cd paytm/
+   64  ll
+   65  git checkout movies
+   66  ll
+   67  git checkout train
+   68  ll
+   69  git checkout dth
+   70  ll
+   71  history
