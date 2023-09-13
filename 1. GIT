@@ -191,3 +191,158 @@ we can merge code of multiple developers.
    69  git checkout dth
    70  ll
    71  history
+=======================================================================================
+DAY-03: 13-09-2023
+
+MERGE, REBASE, MERGE VS REBASE, REVERT, PULL, PUSH, FETCH, CLONE, FORK
+
+MERGE:
+it is used to copy files blw branches
+in branch-1 we have 5 files, branch-2 10 files 
+git checkout master
+git merge movies 
+
+REBASE: 
+it is used to copy file blw branches
+git rebase master
+git merge movies 
+
+MERGE VS REBASE:
+merge we use public repos, privare repose rebase
+merege will store history, rebase will not store entire history
+merge will show files, rebase will not show files
+
+
+REVERT: 
+to undo the merging blw branches.
+after revert the files will be deleted.
+git revert branch_name
+
+
+Git Clone:
+used to dowload the reposiotory from github to local.
+the repo must be pulic.
+
+git clone repo_url
+
+GIT FORK: 
+used to dowload the reposiotory from github to github.
+the repo must be pulic.
+user-1 (repo-a) user-2 (repo-a)
+
+GIT PULL:
+push 	: local  -- > github
+pull	: github -- > local
+
+to get changes from github to git.
+git pull orgin master
+
+GIT FECTH:
+to show changes from github to git.
+git fetch orgin master
+
+git branch -D branch_name	: to delete a branch
+git pull origin branch_name	: to restore a branch
+git branch -m old new		: to rename a branch
+
+HISTORY:
+  1  mkdir paytm
+    2  cd paytm/
+    3  yum install git -y
+    4  git init
+    5  touch index.html
+    6  git add index.html
+    7  git commit -m "v-1" index.html
+    8  git branch
+    9  git branch master
+   10  git branch movies
+   11  git branch
+   12  git checkout movies
+   13  ll
+   14  touch movies{1..5}
+   15  git add movies*
+   16  git commit -m "dev-1" movies*
+   17  git branch train
+   18  git checkout train
+   19  ll
+   20  touch train{1..5}
+   21  git add train*
+   22  git commit -m "dev-2" train*
+   23  git checkout -b dth
+   24  touch dth{1..5}
+   25  git add dth*
+   26  git commit -m "dev-3" dth*
+   27  git checkout -b recharge
+   28  tocuh recharge{1..5}
+   29  touch recharge{1..5}
+   30  git add recharge*
+   31  git commit -m "dev-4" recharge*
+   32  git remote add origin https://github.com/devopsbyraham/paytmrepo.git
+   33  git push origin master
+   34  git push origin movies
+   35  git push origin train
+   36  git push origin dth
+   37  git push origin recharge
+   38  git branch
+   39  git checkout master
+   40  ll
+   41  git merge movies
+   42  ll
+   43  git merge train
+   44  ll
+   45  git rebase dth
+   46  ll
+   47*
+   48  ll
+   49  git revert recharge
+   50  ll
+   51  git revert dth
+   52  ll
+   53  git revert train
+   54  ll
+   55  git branch
+   56  cd
+   57  ll
+   58  rm -rf *
+   59  ll
+   60  git clone https://github.com/devopsbyraham/paytmrepo.git
+   61  ll
+   62  cd paytmrepo/
+   63  ll
+   64  git branch
+   65  git checkout movies
+   66  ll
+   67  git checkout train
+   68  ll
+   69  git checkout dth
+   70  git checkout recharge
+   71  ll
+   72  git branch
+   73  git checkout master
+   74  ll
+   75  cat index.html
+   76  git pull origin master
+   77  cat index.html
+   78*
+   79  cat index.html
+   80  git pull origin master
+   81  git fetch origin master:master
+   82  git fetch origin master
+   83  cat index.html
+   84  git fetch origin master
+   85  cat index.html
+   86  git fetch
+   87  git branch
+   88  git branch -D master
+   89  git branch -D train
+   90  git branch
+   91  git pull origin train
+   92  git branch
+   93  git checkout train
+   94  ll
+   95  git branch
+   96  git branch -m train raham
+   97  git branch
+   98  git branch -m raham train
+   99  git branch
+  100  history
