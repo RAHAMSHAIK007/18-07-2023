@@ -346,3 +346,46 @@ HISTORY:
    98  git branch -m raham train
    99  git branch
   100  history
+
+========================================================
+DAY-04: 14-09-2023
+
+MERGE CONFLICT:
+when we merge 2 diffrent branches with same file and different code conflcits will occur.
+how to resolve: manually
+
+git log 
+git log --oneline
+git log --oneline -2
+
+git show: used to show the files attached for commits.
+git show commit_id
+
+USER CONFIGURE:
+git config user.name "raham"
+git config user.email "raham@gmail.com"
+
+CHERRY-PICK:
+it will merge the specific files from one branch to another
+we use commit id to merge the files.
+git cherry-pick commit_id
+
+
+STASH: 
+it will hide the files temperorly.
+it will applicable for tracked files.
+we should not apply stash for commited.
+
+git stash 
+git stash list
+git stash apply
+git stash clear
+git stash pop
+
+
+.GITIGNORE: 
+we can add the files which we dont want to track or commit.
+vim .gitignore
+php*
+
+
