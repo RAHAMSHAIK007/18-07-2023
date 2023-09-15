@@ -1,0 +1,140 @@
+code -- > compile -- > test -- > artifact
+chicken -- > wash -- > ingredients -- > biryani
+
+ARTIFACT: its a final product for the code.
+JAR = JAVA ARCHIVE	= BACKEND
+WAR = WEB ARCHIVE     
+EAR = ENTEPRISE ARCHIVE
+
+.java -- > compile -- > .class -- > .jar
+
+.java = raw code
+.class = compiled code
+.jar = group of .class files
+
+WAR = FRONT END + BACKEND CODE 
+FRONTEND = HTML, CSS, JS
+BACKEND = JAVA
+
+EAR = ENTERPRISE ARCHIVE
+WAR + JAR
+
+HOW TO CREATE ARTIFACTS ?
+
+BUILD TOOL -- > MAVEN 
+
+
+MAVEN:
+its a build tool or project management too1.
+it will manage dependency and packages for code.
+its is written java by apache software foundation.
+it cames on year 2004.
+its free and opensource.
+it is used for mainly java projects.
+home path: .m2 
+java: 1.8.0
+
+POM.XML : its a file which contains dependcy and info about project.
+
+POM = PROJECT OBJECT MODEL
+XML = EXTENSIBLE MARKUP LANGUAGE
+
+GOAL = its a maven command used to execute a task
+PLUGIN = its a small software which automates work.
+
+PRACTICAL:
+yum install git java-1.8.0-openjdk maven tree -y
+git clone https://github.com/devopsbyraham/jenkins-java-project.git
+cd jenkins-java-project.git
+
+
+MAVEN LIFE CYCLE:
+mvn compile	: to compile the code
+mvn test	: to test the code
+mvn package	: to convert code into artifact
+mvn install	: to copy artifcat to .m2
+mvn clean	: to delete artifacts
+
+mvn clean package
+
+NOTE: GOAL WILL EXECUTE WHEN THERE IS POM.XML
+
+BUILD TOOL FOR LANGUAGES:
+
+C, C++		= MAKE FILE
+.NET		= VISUAL STUDIO
+JAVA		= MAVEN, ANT, GRADLE
+PYTHON		= GRADLE
+
+
+MAVEN VS ANT:
+
+maven use pom.xml, ant uses build.xml
+maven use plugins, ant uses scripts
+plugins are reuseable, scripts are not
+maven has lifecycle, ant will not have
+maven is declarative, ant is procdeural
+
+PROBLEMS:
+war
+deployment
+structure
+
+POSSIBLE ERRORS:
+1. pom.xml
+2. code
+3. java version
+
+[ERROR] error: Source option 5 is no longer supported. Use 7 or later.
+[ERROR] error: Target option 5 is no longer supported. Use 7 or later.
+
+HISTORY:
+ 1  yum install git java-1.8.0-openjdk maven tree -y
+    2  git clone https://github.com/devopsbyraham/jenkins-java-project.git
+    3  ll
+    4  cd jenkins-java-project/
+    5  ll
+    6  rm -rf Jenkinsfile
+    7  ll
+    8  tree
+    9  mvn compile
+   10  ll
+   11  tree
+   12  mvn test
+   13  mvn package
+   14  tree
+   15  mvn install
+   16  ll /root/.m2/repository/in/RAHAM/NETFLIX/1.2.2/
+   17  ll
+   18  mvn clean
+   19  ll
+   20  mvn package
+   21  mvn clean
+   22  ll
+   23  mvn clean package
+   24  cd src/
+   25  ll
+   26  tree
+   27  vim main/java/in/javahome/myweb/controller/Calculator.java
+   28  mvn compile
+   29  ll
+   30  cd ..
+   31  ll
+   32  mvn compile
+   33  java -version
+   34  amazon-linux-extras install java-openjdk11 -y
+   35  update-alternatives --config java
+   36  java -version
+   37  update-alternatives --config java
+   38  java -version
+   39  mvn --version
+   40  vim src/main/java/in/javahome/myweb/controller/Calculator.java
+   41  mvn --version
+   42  yum remove maven* java* -y
+   43  yum install maven -y
+   44  mvn --version
+   45  ll
+   46  mvn clean
+   47  ll
+   48  mvn test
+   49  history
