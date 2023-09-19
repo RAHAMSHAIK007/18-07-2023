@@ -1,0 +1,94 @@
+DAY-01: 19-09-2023
+INTRO, SETUP, CI
+
+JENKINS:
+its a ci/cd tool.
+
+CI: Continous Integration = Continous build + Continous test
+what: old code + new code
+Tools : Git, maven, jenkins
+
+Before CI:
+time waste
+manual work
+regular mistakes
+
+After CI:
+time save
+automated work
+bugs find more quickly
+efficency
+
+CD: Continous Delivery/Continous Deployment
+
+Continous Delivery : Manual deployment of app to Prod
+Continous Deployment : Automation deployment of app to Prod
+
+Deployment: Process of installing application to App servers
+Ex: Tomcat, Nginx, WebSpeher, Glassfish, IIS
+
+ENV:
+DEV	: Developers
+QA	: Testers
+UAT	: Client
+
+PRE-PROD/NON-PROD : DEV, QA, UAT
+
+PROD	: Users
+
+LIVE: PROD
+
+PIPELINE:
+Step by step execution of a process.
+series of events interlinked with each other.
+
+code -- > compile -- > test -- > Artifact -- > Deployment
+raw meat-- > wash -- >ingredients -- > cook -- > Biryani
+
+JENKINS:
+its a free and opensource ci tool.
+its written on java language.
+its platform independet.
+it will automate the CI, CD.
+it will automate the entire SDLC.
+it will have plugins to work and to automate.
+
+HISTORY:
+who: koshuke kawagachi
+year: 2004
+programming: java
+depedency: java-11
+port: 8080
+
+Note: 1.5 years ago jenkins use java-1.8.0
+
+sun mcirosystem -- > Hudson -- > paid
+oracle -- > jenkins -- > free
+
+
+SETUP: CREATE EC2 INSTANCE WITH ALL TRAFFIC
+
+#STEP-1: INSTALLING GIT JAVA-1.8.0 MAVEN 
+yum install git java-1.8.0-openjdk maven -y
+
+#STEP-2: GETTING THE REPO (jenkins.io --> download -- > redhat)
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+#STEP-3: DOWNLOAD JAVA11 AND JENKINS
+amazon-linux-extras install java-openjdk11 -y
+yum install jenkins -y
+update-alternatives --config java
+
+#STEP-4: RESTARTING JENKINS (when we download service it will on stopped state)
+systemctl start jenkins.service
+systemctl status jenkins.service
+
+CONNECTION:
+public-ip-server:8080
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+HOW TO DO CI:
+JOB: if we want to work on jenkin we need to create job.
+
