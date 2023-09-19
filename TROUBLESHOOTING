@@ -1,0 +1,15 @@
+MAVEN:
+
+PROBLEMS:
+war
+deployment
+structure
+
+POSSIBLE ERRORS:
+1. pom.xml
+2. code
+3. java version
+
+[ERROR] error: Source option 5 is no longer supported. Use 7 or later.
+[ERROR] error: Target option 5 is no longer supported. Use 7 or later.
+
