@@ -1,3 +1,8 @@
+STATUS CODES:
+2 SERIES:
+200 : successfully downloaded
+203 : un-Authorized info
+
 MAVEN:
 
 PROBLEMS:
