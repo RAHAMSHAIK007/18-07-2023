@@ -92,3 +92,47 @@ cat /var/lib/jenkins/secrets/initialAdminPassword
 HOW TO DO CI:
 JOB: if we want to work on jenkin we need to create job.
 
+=====================================================================================
+
+DAY-02: 20-09-2023
+
+VARIABLES, ADMIN ACTIVITIES
+
+CREATING A JOB: 
+new item -- > name -- > free style -- > ok -- > Build Steps -- > execute shell
+we can run linux coomands on execute shell
+
+VARIABLES:
+1. USER DEFINED VARS: these variables will be declared by user.
+
+A. LOCAL VARS: these variables will work inside job
+
+name=sunil
+loc=hyderabad
+echo "hai all my name is $name, $name is from $loc, $name is teaching devops"
+
+B. GLOBAL VARS: these variables will work outside of job also
+
+Dashboard
+Manage Jenkins
+System
+Global properties
+Environment variables
+ADD -- > name: raham loc: gudivada
+
+2. JENKINS ENV VARIABLES: these variables will be given by jenkins.
+user cant define jenkins variables.
+
+JENKINS ADMIN ACTIVITES:
+vim /usr/lib/systemd/system/jenkins.service 
+line 67 (8080=8069)
+systemctl daemon-reload
+systemctl restart jenkins.service
+
+RESTORING DELETED JOBS:
+Dashboard -- > Manage Jenkins -- >Plugins -- > Available plugins -- > Job Configuration History -- > install -- > 
+delete a job and -- > Job Configuration History 
+
+PASSWORDLESS LOGIN:
+vim /var/lib/jenkins/config.xml (true=false)
+systemctl restart jenkins.service
