@@ -183,3 +183,238 @@ NOTE: chkconfig jenkins on
 above command will make jenkins service automatically restart itself when sevrver is stopped and started
 
 
+=============================================================
+DAY-04: 22-09-2023 : PIPELINE & SONARQUBE
+
+PIPELINE:
+Step by step execution of a process.
+series of events interlinked with each other.
+
+code -- > compile -- > test -- > Artifact -- > CodeQuality -- > Deployment
+raw meat-- > wash -- >ingredients -- > cook -- > Biryani
+
+ADVANATGES:
+used to automate the work.
+used to save time.
+increase efficency.
+
+
+TYPES:
+1. SCRIPTED
+2. DECLARATIVE (Higly used)
+
+DECLARATIVE:
+its a pipeline used to divide the work into stages and steps.
+each stage will have one or more than on step.
+we use groovy syntax for pipeline.
+we can use pipeline for creating ci cd process.
+we can integrate all tools with pipeline.
+
+
+
+SINGLE STAGE PIPELINE: it will have only one stage
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('one') {
+            steps {
+                sh 'touch file1'
+            }
+        }
+    }
+}
+
+NOTE: to remember pipeline syntax shortcut is PASSS.
+
+P	: pipeline
+A	: agent
+S	: stages
+S	: stage
+S	: steps
+
+MULTI STAGE PIPELINE: it will have more than one stage 
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('abc') {
+            steps {
+                sh 'touch file2'
+            }
+        }
+        stage('def') {
+            steps {
+                sh 'touch file3'
+            }
+        }
+        stage('xyz') {
+            steps {
+                sh 'lscpu'
+            }
+        }
+    }
+}
+
+=========================================================================
+
+CI PIPELINE: build + test
+
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git'
+            }
+        }
+        stage('compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('artifact') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+
+
+PIPELINE AS A CODE: executing more than one action/command in a single stage.
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('raham') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git'
+                sh 'mvn compile'
+                sh 'mvn test'
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+
+PAAC MULTI STAGE: executing more than one action/command in a single stage.
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('raham') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git'
+                sh 'mvn compile'
+            }
+        }
+        stage('abc') {
+            steps {
+                sh 'mvn test'
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+
+
+PAAC ON SINGLE SHELL: executing multiple commands over single shell.
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('raham') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git'
+                sh '''
+                mvn compile
+                mvn test
+                mvn clean package
+                '''
+            }
+        }
+    }
+}
+
+SONARQUBE:
+its a tool used to check the code quality.
+it supports 20+ langauges
+it used to check the bugs, code smells, code duplication, and vulnerabilities.
+it require 2 cpus and 2 gb raham.
+Dependency: Java-11
+port number: 9000
+
+ADVANTAGES:
+check the bugs
+improve the code quality
+improve the developer skills
+remove duplicate codes
+check the security issues(vulnarabilities)
+
+SETUP:
+
+#! /bin/bash
+#Launch an instance with 9000 and t2.medium
+cd /opt/
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-8.9.6.50800.zip
+unzip sonarqube-8.9.6.50800.zip
+amazon-linux-extras install java-openjdk11 -y
+useradd sonar
+chown sonar:sonar sonarqube-8.9.6.50800 -R
+chmod 777 sonarqube-8.9.6.50800 -R
+su - sonar
+
+#run this on server manually
+#sh /opt/sonarqube-8.9.6.50800/bin/linux/sonar.sh start
+#echo "user=admin & password=admin"
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git'
+            }
+        }
+        stage('compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('code quality') {
+            steps {
+                sh '''
+                mvn sonar:sonar \
+                  -Dsonar.projectKey=netflix \
+                  -Dsonar.host.url=http://13.212.251.128:9000 \
+                  -Dsonar.login=70dc65158c7a54889dc42e5d673079569a5dd704
+                '''
+            }
+        }
+        stage('artifact') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+
