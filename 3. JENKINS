@@ -418,3 +418,89 @@ pipeline {
     }
 }
 
+=================================================================
+DAY-05: 25-09-2023 : MASTER AND SLAVE, BLUE OCEAN & CUSTOM WORKSPACE
+
+MASTER AND SLAVE:
+when we continously build jobs on jenkins ,it will get load and have the chance to crash.
+to avoid this load on jenkins we use salve servers to build the jobs
+
+
+slaves are our ec2-servers
+jenkins slaves are used to build the jobs
+master will commnicate with salve using ssh.
+here on slave agent should be installed (java-11)
+without java-11 our slaves will not work.
+slaves are platform independent.
+label: way of assigning work to particular slave.
+
+
+SETUP:
+CREATE AN EC2 INSTANCE AND INSTALL JAVA-11
+amazon-linux-extras install java-openjkd11 -y
+
+Dashboard -- > Manage Jenkins -- >Nodes -- > New node-- > name: salve1 -- > Permanent Agent -- > create 
+
+Number of executors	: 3 (number of paraller build we can do)
+Remote root directory   : /tmp (where your op is going to store)
+Labels			: name (way of assigning work to particular slave)
+Usage			: last opt
+Launch method		: last opt
+Host			: private-ip of slave
+Credentials		: add -- > jenkins -- > 
+kind: ssh username with privatekey
+Username: ec2-user
+Private Key: enter directtly -- > copy paste the pem content
+Host Key Verification Strategy: last opt
+
+create ci job -- > Restrict where this project can be run -- > salve1 -- > save
+
+buid fail -- > why -- > no pkgs 
+yum install git java-1.8.0-openjdk maven -y
+
+
+pipeline {
+    agent {
+        label 'slave1'
+    }
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git' 
+            }
+        }
+        stage('compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('artifact') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+}
+
+CUSTOM WORKSPACE: used to build jobs on our req folder.
+mkdir raham
+cd /
+chown jenkins:jenkins /root/ -R
+
+jenkins-- > ci job -- > use custom workspace -- > /root/raham -- > save
+
+
+BLUE OCAEN PLUGIN: 
+Dashboard
+Manage Jenkins
+Plugins
+availabel plugins 
+blue ocean 
+install
+
