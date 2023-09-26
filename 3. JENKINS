@@ -504,3 +504,132 @@ availabel plugins
 blue ocean 
 install
 
+DAY-06: 26-09-2023
+RBAC, POSTBUILDS, SCRIPTS, INPUT PARAMETERS & PARAMETERS
+
+BUILD SCRIPTS: we can trigger builds from remotely.
+create ci job -- > Trigger builds remotely (e.g., from scripts) -- > token: abc -- >
+copy url (JENKINS_URL/job/netflix/build?token=TOKEN_NAME ) -- > run from browser
+
+
+RBAC: ROLE BASED ACCESS CONTROL.
+
+to restrtic the users from perfoming all access.
+in real time we create roles to do this activity.
+
+1. create users
+Dashboard -- > Manage Jenkins -- > users -- > create user 
+create 2 users (dileep=fresher & sudheer=exp)
+
+2. Download a plugin 
+Dashboard -- > Manage Jenkins -- > Plugins -- > Availabel Plugins
+Role-based Authorization Strategy -- > install -- > go back to top page
+
+Dashboard -- > Manage Jenkins -- > Security -- > Security -- > Authorization
+Role-based Strategy -- >save
+
+3. Manage and assign roles
+Dashboard -- > Manage Jenkins -- > Manage and Assign Roles -- > Manage Roles
+create 2 roles -- > exp -- > fresher
+assign roles -- > add -- > attach roles
+
+
+
+PIPELINE:
+input parameter: it will execute the build based on user input
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git' 
+            }
+        }
+        stage('compile') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('artifact') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('deploy') {
+            input {
+                message "is the parameters clear !"
+                ok "yes"
+            }
+            steps {
+                echo "the app is deployed"
+            }
+        }
+    }
+}
+
+
+POST BUILD ACTIONS:
+Actions that are going to perform after build.
+
+ALWAYS: it will execute the post actions even if build is success or failed.
+SUCESS: it will execute the post actions when build is success only.
+FAILURE: it will execute the post actions when build is failed only.
+
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git' 
+            }
+        }
+        stage('compile') {
+            steps {
+                sh "mvn compile"
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('artifact') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('deploy') {
+            steps {
+                echo "the app is deployed"
+            }
+        }
+    }
+    post {
+        always {
+            echo "hai my build is done"
+        }
+    }
+}
+
+==================================================================
+
+PARAMETERS:
+its a way of passing input for the jobs.
+used to identify the builds also
+
+CHOICE: used to pass single input.
+STRING: used to pass multiple input.
+MULTI LINE STRING: used to pass multiple inputs on multiple lines.
+FILE: used to build local file.
+BOOL: true of false
+
+
