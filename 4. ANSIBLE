@@ -1,0 +1,127 @@
+
+DAY-01: 28-09-2023
+
+servers : jenkins, workernodes (manual)
+pkgs : git, maven, java, tomcat (manual)
+deployment: app (automation)
+
+end to end automate -- > ansible
+
+ANSIBLE:
+its an free and opensource tool.
+used for configuration and management.
+configuration: os, ram, mem, cpu (harware and software props)
+management: pkgs/softwares (install, remove, update ---)
+
+it is used for automate the entire work (server -- > pkgs -- > deploy)
+it will manage multiple worker nodes at a time.
+ansible works on python.
+to work with ansible we need to write yaml scripts.
+ansible is agent less.
+
+History:
+year: 2012
+language: python
+who: maichel dehhan
+owned: RedHat
+but its platform independet.
+
+ARCHITECTURE:
+ANSIBLE SERVER: it will do works for all nodes with help of playbooks.
+PLAYBOOK: its a file which have code for pkg installion and deployment ---
+INVENTORY: its a file which have ip address of worker nodes
+CONNECTION: ssh
+
+SETUP:
+CREATE 5 SERVERS (1=ANSIBLE, 2=DEV, 2=TEST)
+ALL SERVERS:
+sudo -i
+hostnamectl set-hostname ansible/dev-1/dev-2/test-1/test-2
+sudo -i
+
+passwd root
+vim /etc/ssh/sshd_config (38:uncomment, 63:no=yes)
+systemctl restart sshd
+systemctl status sshd
+hostname -i
+
+ANSIBLE SERVER:
+amazon-linux-extras install ansible2 -y
+yum install python3 python-pip python-dlevel -y
+vim /etc/ansible/hosts (line 12)
+
+[dev]
+172.31.15.213
+172.31.1.97
+[test]
+172.31.0.128
+172.31.12.32
+
+ssh-keygen -- > enter -- > enter -- > enter -- > enter
+
+ssh-copy-id root@private ip of dev-1 -- > yes -- > password -- > ssh private ip of dev-1 -- > ctrl d
+ssh-copy-id root@private ip of dev-2 -- > yes -- > password -- > ssh private ip of dev-2 -- > ctrl d
+ssh-copy-id root@private ip of test-1 -- > yes -- > password -- > ssh private ip of test-1 -- > ctrl d
+ssh-copy-id root@private ip of test-2 -- > yes -- > password -- > ssh private ip of test-2 -- > ctrl d
+
+CONNECTION IS DONE:  ansible all -m ping
+
+ADHOC:
+these are simple linux commands.
+these are used for temperory purpose.
+these commands will be overrided.
+
+ansible all -a "yum install git -y"
+ansible all -a "yum install maven -y"
+ansible all -a "mvn --version"
+ansible all -a "touch file1"
+ansible all -a "ls"
+ansible all -a "yum install httpd -y"
+ansible all -a "systemctl status httpd"
+ansible all -a "systemctl start httpd"
+
+HISTROY:
+ 1  passwd root
+    3  vim /etc/ssh/sshd_config
+    4  systemctl restart sshd
+    5  systemctl status sshd
+    6  hostname -i
+    7  amazon-linux-extras install ansible2 -y
+    8  yum install python3 python-pip python-dlevel -y
+    9  vim /etc/ansible/hosts
+   10  ssh-keygen
+   11  ll .ssh/
+   12  ssh-copy-id root@172.31.15.213
+   13  ssh 172.31.15.213
+   14  ssh-copy-id root@172.31.1.97
+   15  ssh 172.31.1.97
+   16  ssh-copy-id root@172.31.0.128
+   17  ssh 172.31.0.128
+   18  ssh-copy-id root@172.31.12.32
+   19  ssh 172.31.12.32
+   20  ansible all -m ping
+   21  ansible all -a "yum install git -y"
+   22  ansible all -a "yum install maven -y"
+   23  ansible all -a "mvn --version"
+   24  ansible all -a "ls"
+   25  ansible all -a "touch file1"
+   26  ansible all -a "ls"
+   27  ansible all -a "yum install httpd -y"
+   28  ansible all -a "systemctl status httpd"
+   29  ansible all -a "systemctl start httpd"
+   30  ansible all -a "systemctl status httpd"
+   31  ansible all -a "useradd raham"
+   32  ansible all -a "cat /etc/passwd"
+   33  ansible all -a "mkdir abcd"
+   34  ansible all -a "ls"
+   35  ansible all -a "ll"
+   36*
+   37  ansible all -a "ll /root"
+   38  ansible dev -a "ls"
+   39  vim /etc/hosts
+   40  ll
+   41  vim abc
+   42  ll
+   43  scp abc root@172.31.15.213:/root
+   44  history
+
