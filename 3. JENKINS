@@ -632,4 +632,104 @@ MULTI LINE STRING: used to pass multiple inputs on multiple lines.
 FILE: used to build local file.
 BOOL: true of false
 
+PROJECT:
+
+TOMCAT SETUP:
+
+tomcat is a web application server.
+if we want to deploy apps we need to have tomcat.
+we deploy here war files. (war=frontend + backend)
+mainly we use to deploy java apps.
+port: 8080
+dependecy: java-11
+
+1. wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80.tar.gz
+2. tar -zxvf apache-tomcat-9.0.80.tar.gz
+3. vim apache-tomcat-9.0.80/conf/tomcat-users.xml
+
+  <role rolename="manager-gui"/>
+  <role rolename="manager-script"/>
+  <user username="tomcat" password="raham123" roles="manager-gui, manager-script"/>
+
+4. vim apache-tomcat-9.0.80/webapps/manager/META-INF/context.xml (delete 21 and 22 lines)
+5. sh apache-tomcat-9.0.80/bin/startup.sh
+public-ip of slave1:8080
+
+Download the plugin to deploy app: Deploy to container	
+
+PIPELINE:
+
+pipeline {
+    agent any
+    
+    stages {
+        stage('checkout') {
+            steps {
+                git 'https://github.com/devopsbyraham/jenkins-java-project.git' 
+            }
+        }
+        stage('compile') {
+            steps {
+                sh "mvn compile"
+            }
+        }
+        stage('test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('artifact') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('deploy') {
+            steps {
+                deploy adapters: [
+                    tomcat9(
+                        credentialsId: 'c4cf0c55-d87c-4739-9d07-13a4bc663ab6',
+                        path: '',
+                        url: 'http://15.207.71.121:8080/'
+                        )
+                    ],
+                    contextPath: 'netflix',
+                    war: 'target/*.war'
+            }
+        }
+    }
+}
+
+ADMIN ACTIVITIES: (TOMCAT)
+1. port change: 
+
+vim apache-tomcat-9.0.80/conf/server.xml (line 69 replcae 8080=9090)
+sh apache-tomcat-9.0.80/bin/shutdown.sh
+sh apache-tomcat-9.0.80/bin/startup.sh
+
+2. password change: 
+
+vim apache-tomcat-9.0.80/conf/tomcat-users.xml
+sh apache-tomcat-9.0.80/bin/shutdown.sh
+sh apache-tomcat-9.0.80/bin/startup.sh
+
+3. Logs:
+tail -10f apache-tomcat-9.0.80/logs/localhost.2023-09-27.log
+
+
+TROUBLESHOOTING:
+
+1. JOB LEVEL:
+a. wrong syntax
+b. configuration
+c. plugins 
+
+2. SERVER LEVEL:
+a. java version
+b. pkgs issue
+c. confiuration (cpu memroy)
+
+3. CODE LEVEL:
+develeopers mistakes 
+log -- > share 
+
 
