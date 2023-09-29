@@ -125,3 +125,154 @@ HISTROY:
    43  scp abc root@172.31.15.213:/root
    44  history
 
+==========================================================================
+DAY-02: 29-09-2023 : modules & playbooks, tags 
+
+MODULE:
+its a key-value pair.
+modules are used for reuasble purpose.
+ansible consist of n number of modules.
+depends on work module will change.
+
+ADHOC 	: ansible all -a "yum install git -y"
+MODULE	: ansible all -m yum -a "name=git state=present"
+
+ansible all -m yum -a "name=docker state=present" [install=present]
+ansible all -m yum -a "name=docker state=latest"  [update=latest]
+ansible all -m yum -a "name=docker state=absent"  [uninstall=absent]
+ansible all -m service -a "name=docker state=started"
+ansible all -m service -a "name=docker state=stopped"
+ansible all -m user -a "name=sudheer state=present"
+ansible all -m user -a "name=sudheer state=absent"
+ansible all -m copy -a "src=raham.txt dest=/root"
+
+PLAYBOOK:
+its a collection of modules.
+we can execute multiple modules inside playbooks.
+playbook is written on YAML langauge.
+YAML=YET ANOTHER MARKUP LANGUAGE
+Extension: .yml or .yaml
+its a human redable and seraliazable language.
+it consits key-value pairs (dictionary).
+space blw key and value must.
+playbook start with --- and end with ... (opt)
+
+EX:
+Name: Raham
+Loc: Hyd
+Company: TCS
+
+PLAYBOOK-1:
+vim raham.yml
+
+- hosts: all
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+
+    - name: installing docker
+      yum: name=docker state=present
+
+    - name: starting docker
+      service: name=docker state=started
+
+    - name: create user
+      user: name=ramesh state=present
+
+ansible-playbook raham.yml
+sed -i 's/present/absent/g' raham.yml
+ansible-playbook raham.yml
+ansible all -a "yum remove git* -y"
+
+TAGS: used to execute or skip specific tasks in playbook.
+
+
+- hosts: all
+  tasks:
+    - name: installing git
+      yum: name=git state=present
+      tags: a
+    - name: installing docker
+      yum: name=docker state=present
+      tags: b
+    - name: starting docker
+      service: name=docker state=started
+      tags: c
+    - name: create user
+      user: name=suresh state=present
+      tags: d
+
+SINGLE TAG:ansible-playbook raham.yml --tags d
+MULTI TAG: ansible-playbook raham.yml --tags b,c
+sed -i 's/present/absent/g' raham.yml
+ansible all -a "yum install git -y"
+SKIPPING SINGLE TAG: ansible-playbook raham.yml --skip-tags "a"
+SKIPPING MULTI TAG: ansible-playbook raham.yml --skip-tags "b,c"
+
+History:
+ 45  sudo -i
+   46  ansible all -m ping
+   47  ansible all -a "ls"
+   48  ansible all -a "yum install git -y"
+   49  ansible all -a "yum remove git* -y"
+   50  ansible all -m yum -a "name=git state=present"
+   51  ansible all -a "git --version"
+   52  ansible all -m yum -a "name=maven state=present"
+   53  ansible all -m yum -a "name=docker state=present"
+   54  ansible all -m yum -a "name=docker state=latest"
+   55  ansible all -m yum -a "name=docker state=absent"
+   56  ansible all -a "docker --version"
+   57  ansible all -m yum -a "name=docker state=present"
+   58  ansible all -a "docker --version"
+   59  ansible all -m yum -a "name=docker state=start"
+   60  ansible all -m yum -a "name=docker state=started"
+   61  ansible all -m service -a "name=docker state=started"
+   62  ansible all -m service -a "name=docker state=stopped"
+   63  ansible all -m service -a "name=docker state=stoppe"
+   64  ansible all -a "sytemctl status docker"
+   65  ansible all -a "systemctl status docker"
+   66  ansible all -m service -a "name=docker state=started"
+   67  ansible all -a "systemctl status docker"
+   68  ansible all -m user -a "name=lucky state=present"
+   69  ansible all -a "cat /etc/passwd"
+   70  ansible all -m user -a "name=sudheer state=present"
+   71  ansible all -a "cat /etc/passwd"
+   72  ansible all -m user -a "name=sudheer state=absent"
+   73  ansible all -a "cat /etc/passwd"
+   74  ll
+   75  cat abc
+   76  vim raham.txt
+   77  ll
+   78  ansible all -a "ls"
+   79  ansible all -m copy -a "src=raham.txt dest=/root"
+   80  ansible all -a "ls"
+   81  ansible all -a "yum remove git maven docker -y"
+   82  ansible all -a "docker --version"
+   83  ansible all -a "mvn --version"
+   84  ansible all -a "git --version"
+   85  ansible all -a "yum remove git* -y"
+   86  ansible all -a "git --version"
+   87  rm -rf *
+   88  vim raham.yml
+   89  ansible-playbook raham.yml
+   90  cat raham.yml
+   91  sed -i 's/present/absent/g' raham.yml
+   92  cat raham.yml
+   93  ansible-playbook raham.yml
+   94  cat raham.yml
+   95  sed -i 's/absent/present/g' raham.yml
+   96  cat raham.yml
+   97  vim raham.yml
+   98  ansible all -a "yum remove git* -y"
+   99  cat raham.yml
+  100  ansible-playbook raham.yml --tags d
+  101  ansible-playbook raham.yml --tags b,c
+  102  sed -i 's/present/absent/g' raham.yml
+  103  cat raham.yml
+  104  ansible all -a "yum install git -y"
+  105  cat raham.yml
+  106  ansible-playbook raham.yml --skip-tags "c"
+  107  cat raham.yml
+  108  history
+
+===============================================================================================
