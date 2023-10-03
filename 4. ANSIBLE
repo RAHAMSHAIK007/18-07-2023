@@ -277,7 +277,8 @@ History:
 
 ===============================================================================================
 
-DAY-03: 03-10-2022
+DAY-03: 03-10-2022 
+HANDLERS, CONDITIONS, LOOPS, VARIBALES 
 
 Handlers:
 in handlers tasks are interlinked.
@@ -345,8 +346,6 @@ ansible all -m setup | grep -i family
       apt: name=apache2 state=present
       when: ansible_os_family == "Debian"
 
-
-============================================================================
 
 LOOPS:
 
