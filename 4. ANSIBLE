@@ -276,3 +276,239 @@ History:
   108  history
 
 ===============================================================================================
+
+DAY-03: 03-10-2022
+
+Handlers:
+in handlers tasks are interlinked.
+one task will depend on another task.
+when task-1 is executed it will ask to run task-2.
+notify is used to tell task-2 to execute.
+
+
+- hosts: all
+  tasks:
+    - name: installing apache
+      yum: name=httpd state=present
+      notify: starting apache
+
+  handlers:
+    - name: starting apache
+      service: name=httpd state=started
+
+sed -i 's/present/absent/g; s/install/uninstall/g' raham.yml
+
+- hosts: all
+  tasks:
+    - name: uninstalling apache
+      yum: name=httpd state=absent
+      notify: starting apache
+
+  handlers:
+    - name: starting apache
+      service: name=httpd state=started
+      ignore_errors: yes
+
+
+CLUSTER: group of servers/nodes which communicate with each other.
+HOMOGENIUS: all servers with same os and flavour.
+HETROGENIUS: all servers with different os and flavour.
+
+RedHat: yum 
+Ubuntu: apt 
+
+
+CONDITIONS:
+
+- hosts: all
+  tasks:
+    - name: installing apache on RedHat
+      yum: name=httpd state=present
+      when: ansible_os_family == "RedHat"
+
+    - name: installing apache on Ubuntu
+      apt: name=apache2 state=present
+      when: ansible_os_family == "Debian"
+
+ansible all -m setup
+ansible all -m setup | grep -i family
+
+
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: installing apache on RedHat
+      yum: name=httpd state=present
+      when: ansible_os_family == "RedHat"
+
+    - name: installing apache on Ubuntu
+      apt: name=apache2 state=present
+      when: ansible_os_family == "Debian"
+
+
+============================================================================
+
+LOOPS:
+
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: installing pkgs
+      yum: name={{item}} state=present
+      loop:
+        - git
+        - tree
+        - docker
+        - httpd
+        - java-1.8.0-openjdk
+        - maven
+
+
+- hosts: all
+  tasks:
+    - name: installing pkgs
+      yum: name="{{item}}" state=absent
+      loop:
+        - git*
+        - tree*
+        - httpd*
+        - java-1.8.0-openjdk*
+        - maven*
+
+
+- hosts: all
+  tasks:
+    - name: installing pkgs
+      user: name="{{item}}" state=present
+      loop:
+        - lucky
+        - imthiaz
+        - siva
+        - rajesh
+        - pavan
+
+- hosts: all
+  tasks:
+    - name: installing pkgs
+      user: name="{{item}}" state=absent
+      loop:
+        - lucky
+        - imthiaz
+        - siva
+        - rajesh
+        - pavan
+
+
+VARIBALES:
+STATIC VARS: these variables will declared inside playbook.
+it will not change until unless we change.
+
+- hosts: all
+  vars:
+    a: git
+    b: maven
+  tasks:
+    - name: installing pkg
+      yum: name={{a}} state=absent
+    - name: installing pkg
+      yum: name={{b}} state=absent
+
+
+DYNAMIC VARS: these variables will declared outside playbook.
+it will  change frequenlty as per our requirment.
+
+
+- hosts: all
+  tasks:
+    - name: installing pkg
+      yum: name={{a}} state=present
+    - name: installing pkg
+      yum: name={{b}} state=present	
+
+ansible-playbook raham.yml --extra-vars "a=git b=maven"
+
+
+HISTORY:
+
+ 109  vim raham.yml
+  110  ansible all -a "yum install git docker -y"
+  111  vim raham.yml
+  112  ansible-playbook raham.yml
+  113  ansible all -a "yum install git docker -y"
+  114  vim raham.yml
+  115  ansible-playbook raham.yml
+  116  cat raham.yml
+  117  rm -rf *
+  118  vim raham.yml
+  119  ansible-playbook raham.yml
+  120  ansible all -a "yum remove httpd* -y"
+  121  ansible-playbook raham.yml
+  122  cat raham.yml
+  123  sed -i 's/present/absent/g, s/install/uninstall/g' raham.yml
+  124  sed -i 's/present/absent/g; s/install/uninstall/g' raham.yml
+  125  cat raham.yml
+  126  vim raham.yml
+  127  ansible-playbook raham.yml
+  128  vim raham.yml
+  129  ansible setup -m all
+  130  ansible all -m setup
+  131  ansible all -m setup | grep -i family
+  132  cat raham.yml
+  133  ansible-playbook raham.yml
+  134  python3
+  135  sed -i 's/present/absent/g; s/install/uninstall/g' raham.yml
+  136  ansible-playbook raham.yml
+  137  vim raham.yml
+  138  ansible-playbook raham.yml
+  139  vim raham.yml
+  140  ansible-playbook raham.yml
+  141  vim raham.yml
+  142  ansible-playbook raham.yml
+  143  vim raham.yml
+  144  ansible-playbook raham.yml
+  145  ansible all -m ping
+  146  vim raham.yml
+  147  ansible-playbook raham.yml
+  148  ansible all -a "yum remove httpd* git* docker* maven* java* tree* -y"
+  149  ansible-playbook raham.yml
+  150  cat raham.yml
+  151  ansible2 --version
+  152  ansible --version
+  153  vim raham.yml
+  154  ansible-playbook raham.yml
+  155  cat raham.yml
+  156  vim raham.yml
+  157  ansible-playbook raham.yml
+  158  ansible all -a "git --version"
+  159  ansible all -a "mvn --version"
+  160  ansible all -a "tree --version"
+  161  ansible all -a "httpd --version"
+  162  ansible all -a "httpd -v"
+  163  cat raham.yml
+  164  sed -i 's/present/absent/g' raham.yml
+  165  cat raham.yml
+  166  vim raham.yml
+  167  ansible-playbook raham.yml
+  168  vim raham.yml
+  169  ansible-playbook raham.yml
+  170  ansible all -a "cat /etc/passwd"
+  171  sed -i 's/present/absent/g' raham.yml
+  172  ansible-playbook raham.yml
+  173  ansible all -a "cat /etc/passwd"
+  174  vim raham.yml
+  175  ansible-playbook raham.yml
+  176  vim raham.yml
+  177  ansible-playbook raham.yml
+  178  vim raham.yml
+  179  sed -i 's/present/absent/g' raham.yml
+  180  ansible-playbook raham.yml
+  181  vim raham.yml
+  182  ansible-playbook raham.yml --extra-vars "a=git b=maven"
+  183  ansible all -a "yum remove git* maven* -y"
+  184  ansible-playbook raham.yml --extra-vars "a=git b=maven"
+  185  vim raham.yml
+  186  ansible-playbook raham.yml --extra-vars "a=git, b=maven"
+  187  ansible-playbook raham.yml --extra-vars "a=git b=maven"
+  188  ansible all -a "git -v"
+  189  ansible all -a "mvn --version"
+  190  history
