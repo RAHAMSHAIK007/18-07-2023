@@ -511,3 +511,167 @@ HISTORY:
   188  ansible all -a "git -v"
   189  ansible all -a "mvn --version"
   190  history
+
+==========================================================
+
+DAY-04: 4-10-2023
+ROLES AND VAULT
+
+ROLES:
+it is used to divide playbook into directory structure.
+we can reduce the Playbook length.
+we can encapuslate data.
+roles are resuable.
+in real time all you are going to work on roles only.
+
+
+.
+└── roles
+    ├── pkgs
+    │   └── tasks
+    │       └── main.yml
+    ├── users
+    │   └── tasks
+    │       └── main.yml
+    └── web
+        └── tasks
+            └── main.yml
+
+
+mkdir playbook
+cd playbook
+
+mkdir -p roles/users/tasks
+mkdir -p roles/pkgs/tasks
+mkdir -p roles/web/tasks
+yum install tree -y
+
+vim roles/pkgs/tasks/main.yml
+
+- name: install pkgs
+  user: name={{item}} state=present
+  loop:
+    - git
+    - java-1.8.0-openjdk
+    - tree
+    - docker
+    - maven
+
+vim roles/users/tasks/main.yml
+
+- name: creat users
+  user: name={{item}} state=present
+  loop:
+    - luckyy
+    - imthiaz
+    - siva
+    - rajesh
+    - pavan
+
+vim roles/web/tasks/main.yml
+
+- name: install webserver
+  yum: name=httpd state=present
+
+- name: starting httpd
+  service: name=httpd state=present
+
+
+vim master.yml
+- hosts: all
+  roles:
+    - user
+    - web
+
+find ./ -type f -exec sed -i -e 's/present/absent/g' {} \;
+
+
+find . -type f : to find files from current folder
+-exec : executing a command on that files
+sed -i -e 's/present/absent/g' : to replace 
+
+
+ANSIBLE VAULT:
+ansible vault is used to encrypt the data.
+in real time to keep our sensitive data protectively we use vault.
+with valut we can encrypt username, passwords & playbook ---
+technique: AES256 (used by facebook)
+we can restrict the playbooks to run.
+
+ansible-vault create creds1.txt 
+ansible-vault edit creds1.txt 
+ansible-vault rekey creds1.txt 
+ansible-vault decrypt creds1.txt 
+ansible-vault encrypt creds1.txt 
+
+
+cat creds.txt
+user=raham
+password=test123
+
+HISTORY:
+ 191  mkdir playbook
+  192  cd playbook/
+  193  mkdir -p roles/users/tasks
+  194  mkdir -p roles/pkgs/tasks
+  195  mkdir -p roles/web/tasks
+  196  yum install tree -y
+  197  tree
+  198  vim roles/pkgs/tasks/main.yml
+  199  tree
+  200  vim roles/users/tasks/main.ym
+  201  vim roles/pkgs/tasks/main.ym
+  202  vim roles/pkgs/tasks/main.yml
+  203  tree
+  204  mv roles/users/tasks/main.ym roles/users/tasks/main.yml
+  205  tree
+  206  vim roles/web/tasks/main.yml
+  207  tree
+  208  cat roles/pkgs/tasks/main.yml
+  209  cat roles/users/tasks/main.yml
+  210  cat roles/web/tasks/main.yml
+  211  vim master.yml
+  212  cat master.yml
+  213  ansible-playbook master.yml
+  214  vim master.yml
+  215  ansible-playbook master.yml
+  216  vim master.yml
+  217  vim roles/users/tasks/main.yml
+  218  vim roles/pkgs/tasks/main.yml
+  219  ansible-playbook master.yml
+  220  vim master.yml
+  221  ansible-playbook master.yml
+  222  vim roles/web/tasks/main.yml
+  223  ansible-playbook master.yml
+  224  vim master.yml
+  225  ansible-playbook master.yml
+  226  ll
+  227  tree
+  241 find . -type f -exec sed -i -e 's/present/absent/g' {} \;
+  242  vim master.yml
+  243  ansible-playbook master.yml
+  244  cd
+  245  rm -rf *
+  246  vim creds.txt
+  247  cat creds.txt
+  248  ansible-vault create creds1.txt
+  249  cat creds.txt
+  250  cat creds1.txt
+  251  ansible-vault edit creds1.txt
+  252  cat creds1.txt
+  253  ansible-vault rekey creds1.txt
+  254  cat creds1.txt
+  255  ansible-vault decrypty creds1.txt
+  256  ansible-vault decrypt creds1.txt
+  257  cat creds1.txt
+  258  ansible-vault endecrypt creds1.txt
+  259  ansible-vault encrypt creds1.txt
+  260  cat creds1.txt
+  261  vim raham.yml
+  262  cat raham.yml
+  263  vim raham.yml
+  264  cat raham.yml
+  265  ansible-vault encrypt raham.yml
+  266  cat raham.yml
+  267  ansible-playbook raham.yml
+  268  history
