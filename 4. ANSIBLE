@@ -675,3 +675,138 @@ HISTORY:
   266  cat raham.yml
   267  ansible-playbook raham.yml
   268  history
+
+=======================================================
+
+DAY-05: 05-10-2023
+PIP, SETUP, DEBUG, LAMP & TOMCAT DEPLOYMENT WITH PLAYBOOK
+
+PIP MODULE: it is used to install python modules.
+NumPy & Pandas
+
+RedHat: yum 
+Ubuntu: apt
+Python: pip 
+
+
+- hosts: all
+  tasks:
+    - name: install pip module
+      yum: name=pip state=present
+
+    - name: installing Numpy
+      pip: name=NumPy state=present
+
+    - name: installing Pandas
+      pip: name=Pandas state=present
+
+================================================================
+
+SETUP MODULE: to show complete info of ansible worker nodes
+ansible all -m setup
+ansible all -m setup | grep -i cpu
+ansible all -m setup | grep -i block
+
+
+cpu 		: ansible_processor_vcpus
+mem		: ansible_memtotal_mb
+host		: ansible_nodename
+flavour		: ansible_os_family
+pkg manager	: ansible_pkg_mgr
+blk		: block_available
+kernel		: BOOT_IMAGE
+
+
+debug module: it will print messages 
+
+- hosts: all
+  tasks:
+    - name: printging a msg
+      debug:
+        msg: hai all my name is raham
+
+
+- hosts: all
+  tasks:
+    - name: printging a msg
+      debug:
+        msg: "server name is: {{ansible_nodename}}, number of cpus: {{ansible_processor_vcpus}}, total memsize: {{ansible_memtotal_mb}}, the flavour is: {{ansible_os_family}}, package manager is: {{ansible_pkg_mgr}}"
+
+
+LAMP: 
+
+L : LINUX
+A : APACHE
+M : MYSQL
+P : PHP
+
+
+- hosts: all
+  tasks:
+    - name: Installing Apache
+      yum: name=httpd state=present
+
+    - name: Installing Mysql
+      yum: name=mysql state=present
+
+    - name: Installing Python
+      yum: name=python state=present
+
+TOMCAT DEPLOYMENT THROUGH ANSIBLE
+https://github.com/RAHAMSHAIK007/all-setups.git
+
+
+HISTORY:
+ 276  vim raham.yml
+  277  ansible-playbook raham.yml
+  278  ansible-galaxy init rahama
+  279  ll
+  280  tree
+  281  ansible-galaxy search tomcat
+  282  ansible-galaxy install amtega.tomcat
+  283  ls -al
+  284  cd .ansible/
+  285  ll
+  286  cd roles/
+  287  ll
+  288  cd amtega.
+  289  cd amtega.tomcat/
+  290  ll
+  291  tree
+  292  cd
+  293  ansible-galaxy search --author amtega
+  294  ansible all -m setup
+  295  ansible all -m setup | grep -i cpu
+  296  ansible all -m setup | grep -i memory
+  297  ansible all -m setup | grep -i block
+  298  ansible all -m setup
+  299  vim raham
+  300  ll
+  301  rm -rf rahama/
+  302  vim raham.yml
+  303  ansible-playbook raham.yml
+  304  vim raham.yml
+  305  ansible-playbook raham.yml
+  306  vim raham.yml
+  307  ansible-playbook raham.yml
+  308  vim raham.yml
+  309  ansible-playbook raham.yml
+  310  vim raham.yml
+  311  ansible-playbook raham.yml
+  312  vim raham.yml
+  313  ansible-playbook raham.yml
+  314  vim tomcat.yml
+  315  vim tomcat-user.xml
+  316  vim context.xml
+  317  vim tomcat.yml
+  318  ansible-playbook tomcat.yml
+  319  ll
+  320  mv tomcat-user.xml tomcat-users.xml
+  321  ansible-playbook tomcat.yml
+  322  vim tomcat.yml
+  323  yum install git -y
+  324  git clone https://github.com/RAHAMSHAIK007/all-setups.git
+  325  cd all-setups/
+  326  ll
+  327  cd
+  328  history
