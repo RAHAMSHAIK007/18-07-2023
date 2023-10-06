@@ -549,7 +549,7 @@ yum install tree -y
 vim roles/pkgs/tasks/main.yml
 
 - name: install pkgs
-  user: name={{item}} state=present
+  yum: name="{{item}}" state=present
   loop:
     - git
     - java-1.8.0-openjdk
@@ -574,13 +574,13 @@ vim roles/web/tasks/main.yml
   yum: name=httpd state=present
 
 - name: starting httpd
-  service: name=httpd state=present
+  service: name=httpd state=started
 
 
 vim master.yml
 - hosts: all
   roles:
-    - user
+    - users
     - web
 
 find ./ -type f -exec sed -i -e 's/present/absent/g' {} \;
