@@ -1,0 +1,105 @@
+DAY-01: 09-10-2023
+
+INTRO, ANALYSIS, ARCHITECTURE, SETUP & SOME BASIC COMMANDS
+
+MONOLITHIC: SINGLE APP -- > SINGLE SERVER -- > SINGLE DB
+MICRO SERVICES: SINGLE APP -- > MULTIPLE SERVERS -- > MULTIPLE DB
+
+containerization: Process of packing application with its dependencies.
+EX: PUBG 
+BEFORE CONTAINARIZATION: [APP=PLAYSTORE MAPS=INTERNET]
+AFTER CONTAINARIZATION: [APP(MAPS) = PLAYSTORE]
+
+CAKE=BAKERY & KINFE=STORE
+SWIGGY= CAKE & KNIFE 
+
+
+LIMITATIONS:
+1. DEPENDCY
+2. SCALE
+3. SLOW DEVELOPMENT
+4. TESTING 
+
+
+WHY MICRO SERVICES :
+CLOSTLY -- > SOLUTION
+
+SERVERS = CONTAINERS
+
+CONTAINERS:
+it is used to create, run and deploy application.
+conatiainers are advance than servers.
+these are light weighted components.
+
+IMAGE:
+it will have os which req to run our container.
+os -- > pkgs -- > deploy
+
+DOCKER:
+its a tool used to create containers.
+its a free and opensoure platfrom to create containers.
+its platfrom independent.
+docker runs on any os but natively supports linux distributions.
+it is used to containerize the application.
+language: GO LANG
+Year: 2013
+Who: Solomen Hykes and Sebastian Phal
+befor docker user faced lot of issues, after docker users are not facing the issues.
+
+
+DOCKER COMPONENTS:
+DOCKER CLIENT: it interacts with us (command -- > execute -- > output)
+DOCKER HOST: Where we install docker (Ec2, Laptop, Vm)
+DOCKER DAEMON: manages all docker components (Conatiners, Images, Volume)
+DOCKER REGISTRY: it manages all the docker images.
+
+INSTALLATION:
+yum install docker -y
+systemctl start docker
+systemctl status docker
+docker version
+
+COMMANDS:
+docker images		: to show list of images
+docker pull amazonlinux	: to get image amazonlinux from dockerhub
+docker run -it --name cont1 amazonlinux : to create container
+
+ls
+yum install git maven tree httpd -y
+check the version
+touch file{1..10}
+
+ctrl p q		: to exit from container
+docker search ubuntu	: to search images
+docker ps -a		: to list all containers
+docker ps 		: to list runnings containers
+docker stop cont1	: to stop the container
+docker start cont1	: to start the container
+docker attach cont1	: to go inside the container
+docker inspect cont1	: to get the complete info container
+
+HISTORY:
+ 1  yum install docker -y
+    2  systemctl start docker
+    3  systemctl status docker
+    4  docker version
+    5  docker images
+    6  cd /
+    7  du -sh
+    8  docker pull amazonlinux2
+    9  docker pull amazonlinux
+   10  docker images
+   11  docker run -it --name cont1 amazonlinux
+   12  docker search redhat
+   13  docker search ubuntu
+   14  docker ps -a
+   15  docker attach cont1
+   16  docker ps -a
+   17  docker stop cont1
+   18  docker ps -a
+   19  docker ps
+   20  docker start cont1
+   21  docker ps
+   22  docker inspect cont1
+   23  docker stats
+   24  history
