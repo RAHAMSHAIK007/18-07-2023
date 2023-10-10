@@ -103,3 +103,175 @@ HISTORY:
    22  docker inspect cont1
    23  docker stats
    24  history
+===========================================
+DAY-02: 10-10-2023
+DOCKER FILE
+
+CONTAINARIZATION: OS-LEVEL OF VIRTUALIZATION
+
+docker pull ubuntu
+docker run -it --name cont1 ubuntu
+ls
+apt update -y
+apt install maven git tree apache2 -y
+touch file{1..10}
+apt install vim -y
+docker commit cont1 raham:v1
+check the pkgs and file
+
+Above method is worst method.
+because its manual method.
+
+
+DOCKER FILE:
+it is used to automate image creation.
+we write the Dockerfile we can reuse it.
+inside Dockerfile we use components to do our works.
+Components will be on Capital Letter.
+in Dockerfile D will be capital.
+to create image from file we need to build it.
+
+FROM		: to get the os for conatiner.
+RUN		: to execute linux commands(image creation)
+CMD		: to execute linux commands(container creation)
+ENTRYPOINT	: high priority than CMD
+COPY		: it will copy local files to conatiner.
+ADD		: it will copy internet files to conatiner.
+WORKDIR		: to go specific foilder inside container
+LABEL		: used to attach labels for image
+ENV		: to pass env variables inside the container
+ARGS		: to pass env variables outside the container
+EXPOSE		: used to allocate port number
+
+
+EX-1:
+
+vim Dockerfile
+
+FROM ubuntu
+RUN apt update -y
+RUN apt install git maven tree apache2 -y
+RUN touch file1
+
+docker build -t raham:v2 .
+docker run -it --name cont3 raham:v2
+
+
+EX-2:
+
+FROM ubuntu
+RUN apt update -y
+RUN apt install git maven tree apache2 -y
+RUN touch file1
+RUN apt install default-jre -y
+CMD ["java", "-version"]
+
+docker build -t raham:v3 .
+docker run -it --name cont4 raham:v3
+
+EX-3:
+
+FROM ubuntu
+COPY index.html /tmp
+ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80.tar.gz /tmp
+
+
+docker build -t raham:v4 .
+docker run -it --name cont5 raham:v4
+
+
+EX-4:
+
+FROM ubuntu
+COPY index.html /tmp
+ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80.tar.gz /tmp
+WORKDIR /tmp
+LABEL author Raham
+
+docker build -t raham:v5 .
+docker run -it --name cont6 raham:v5
+docker inspect cont6
+
+EX-5:
+
+FROM ubuntu
+COPY index.html /tmp
+ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80.tar.gz /tmp
+WORKDIR /tmp
+LABEL author Raham
+ENV client swiggy
+ENV server prod
+
+docker build -t raham:v6 .
+docker run -it --name cont7 raham:v6
+
+BASIC DEPLOY:
+
+vim Dockerfile
+
+FROM ubuntu
+RUN apt update -y
+RUN apt install apache2 -y
+COPY index.html /var/www/html
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+
+docker build -t devopsbyraham:v1 .
+docker run -itd --name cont10 -p 81:80 devopsbyraham:v1
+
+
+HISTORY:
+1  yum install docker -y
+    2  systemctl start docker.service
+    3  systemctl status docker.service
+    4  docker pull ubuntu
+    5  docker images
+    6  docker run -it --name cont1 ubuntu
+    7  docker ps
+    8  docker images
+    9  docker commit cont1 raham:v1
+   10  docker images
+   11  docker run -it --name cont2 raham:v1
+   12  vim Dockerfile
+   13  cat Dockerfile
+   14  ll
+   15  docker build -t raham:v2 .
+   16  docker images
+   17  docker run -it --name cont3 raham:v2
+   18  vim Dockerfile
+   19  docker build -t raham:v3 .
+   20  docker run -it --name cont4 raham:v3
+   21  docker ps
+   22  vim Dockerfile
+   23  docker build -t raham:v4 .
+   24  ll
+   25  vim index.html
+   26  docker build -t raham:v4 .
+   27  docker run -it --name cont5 raham:v4
+   28  vim index.html
+   29  vim Dockerfile
+   30  docker build -t raham:v5 .
+   31  docker run -it --name cont6 raham:v5
+   32  docker inspect cont6
+   33  vim Dockerfile
+   34  docker build -t raham:v6 .
+   35  docker run -it --name cont7 raham:v6
+   36  vim Dockerfile
+   37  docker build -t raham:v7 .
+   38  docker run -it --name cont8 raham:v7
+   39  docker inspect cont8 | grep -i arg
+   40  docker inspect cont8
+   41  docker inspect cont8 | grep -i subject
+   42  docker ps
+   43  vim Dockerfile
+   44  docker build -t raham:v7 .
+   45  docker run -it --name cont9 raham:v7
+   46  docker ps
+   47  vim Dockerfile
+   48  rm -rf *
+   49  vim index.html
+   50  vim Dockerfile
+   51  docker build -t devopsbyraham:v1 .
+   52  docker run -itd --name cont10 -p 81:80 devopsbyraham:v1
+   53  docker run -itd --name cont11 -p 82:80 devopsbyraham:v1
+   54  docker run -it --name cont12 ubuntu
+   55  history
