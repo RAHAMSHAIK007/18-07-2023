@@ -275,3 +275,76 @@ HISTORY:
    53  docker run -itd --name cont11 -p 82:80 devopsbyraham:v1
    54  docker run -it --name cont12 ubuntu
    55  history
+=========================================
+
+DAY-03: 11-10-2023
+
+VOLUME:
+in conatiner if we want to store data we can use volumes.
+volume is nothing but a folder in container.
+volume can be shared to multiple containers.
+At a time we can share single volume.
+data inside volume will store on local.
+volumes are loosely coupled to conatainer.
+
+1. DOCKER FILE:
+
+FROM ubuntu
+VOLUME ["/volume1"]
+
+docker build -t raham:v1 .
+docker run -it --name cont1 raham:v1
+cd volume1
+touch file{1..10}
+ctrl p q
+docker run -it --name cont2 --volumes-from cont1 --privileged=true ubuntu
+cd volume1
+touch file{11..20}
+ctrl p q
+docker attach cont1
+ll
+
+===================================================================================
+
+2. MOUNT VOLUME: 
+volume we create locally the we add for conatier
+
+docker volume ls
+docker volume create volume2
+docker volume inspect volume2
+cd /var/lib/docker/volumes/volume2/_data
+touch python{1..10}
+docker run -it --name cont4 --mount source=volume3,destination=/abc ubuntu
+
+========================================================================
+
+3. CLI:
+docker run -it --name cont5 -v /volume4 ubuntu
+cd volume4
+touch php{1..10}
+docker run -it --name cont6 --volumes-from cont5 --privileged=true ubuntu
+
+
+4. SHARING LOCAL FILES
+
+cd 
+touch raham{1..10}
+docker volume inspect volume3
+cp * /var/lib/docker/volumes/volume3/_data
+docker attach cont4
+cd volume3
+ll
+
+5. LOCAL FILES -- > VOLUME -- > CONTAINER
+
+docker run -it --name cont10 -v /root:/volume5 ubuntu
+
+
+DOCKER SYSTEM COMMANDS:
+to know the docker components resource utilization
+docker system df
+docker system df -v
+
+docker ps -a -q
+docker kill $(docker ps -a -q)
+docker rm $(docker ps -a -q)
