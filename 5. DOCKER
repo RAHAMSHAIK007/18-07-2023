@@ -350,7 +350,7 @@ docker kill $(docker ps -a -q)
 docker rm $(docker ps -a -q)
 docker rmi -f $(docker images -q)
 
-DAY-04: 12-02-2023
+DAY-04: 12-10-2023
 DOCKER COMPOSE & DOCKER HUB
 
 vim Dockerfile
