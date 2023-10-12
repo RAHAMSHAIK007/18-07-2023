@@ -348,3 +348,201 @@ docker system df -v
 docker ps -a -q
 docker kill $(docker ps -a -q)
 docker rm $(docker ps -a -q)
+docker rmi -f $(docker images -q)
+
+DAY-04: 12-02-2023
+DOCKER COMPOSE & DOCKER HUB
+
+vim Dockerfile
+
+FROM ubuntu
+RUN apt update -y
+RUN apt install apache2 -y
+COPY index.html /var/www/html
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
+
+Index.html: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_form_icon
+
+docker build -t movies:v1 .
+docker run -itd --name cont1 -p 81:80 movies:v1
+
+docker build -t train:v1 .
+docker run -itd --name cont2 -p 82:80 train:v1
+
+docker build -t dth:v1 .
+docker run -itd --name cont3 -p 83:80 dth:v1
+
+docker build -t recharge:v1 .
+docker run -itd --name cont4 -p 84:80 recharge:v1
+
+
+DOCKER COMPOSE:
+it is a tool used to create multiple conatiners.
+it will work on single host.
+we can write a file called docker-compose which will be on yaml format.
+in that file we can write services info (images, port, volume, replicas)
+
+SETUP:
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+ls /usr/local/bin/
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose version
+
+
+vim docker-compose.yml
+
+version: '3.8'
+services:
+  movies:
+    image: movies:v1
+    ports:
+      - "81:80"
+  train:
+    image: train:v1
+    ports:
+      - "82:80"
+  dth:
+    image: dth:v1
+    ports:
+      - "83:80"
+  recharge:
+    image: recharge:v1
+    ports:
+      - "84:80"
+
+
+docker-compose up -d		: to create and start containers
+docker-compose stop		: to stop containers
+docker-compose start		: to start containers
+docker-compose kill		: to kill containers
+docker-compose rm		: to delete containers
+docker-compose down		: to stop and delete containers
+docker-compose pause		: to pause containers
+docker-compose unpause		: to unpause containers
+docker-compose ps		: to show containers of compose file
+docker-compose top		: to show process runnning inside the containers 
+docker-compose logs		: to show logs of containers 
+docker-compose scale train=10	: to scale train containers
+
+
+CHANGING DEFALUT FILE:
+
+Supported filenames: docker-compose.yml, docker-compose.yaml, compose.yml, compose.yaml
+mv docker-compose.yml raham.yml
+
+docker-compose -f raham.yml down
+docker-compose -f raham.yml up -d
+docker-compose -f raham.yml ps
+
+
+DOCKERHUB:
+its a place where we can store all images
+docker hub is nothing but docker registry
+we can store our images centrally
+once we push image to docker hub we can access from anywhere
+
+PROCESS:
+create image
+docker tag image username/repo
+docker push username/repo
+
+HISTORY:
+      1  cat Dockerfile
+    2  docker run -itd --name cont1 -p 81:80 movies:v1
+    3  vim index.html
+    4  docker build -t train:v1 .
+    5  docker run -itd --name cont2 -p 82:80 train:v1
+    6  vim index.html
+    7  docker build -t dth:v1 .
+    8  docker run -itd --name cont3 -p 83:80 dth:v1
+    9  vin index.html
+   10  vim index.html
+   11  docker build -t recharge:v1
+   12  docker build -t recharge:v1  .
+   13  docker run -itd --name cont4 -p 84:80 recharge:v1
+   14  docker-compose
+   15  sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+   16  ls /usr/local/bin/
+   17  sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+   18  sudo chmod +x /usr/local/bin/docker-compose
+   19  docker-compose version
+   20  docker-compose
+   21  docker ps -a
+   22  docker ps -a -q
+   23  docker kill $(docker ps -a -q)
+   24  docker rm $(docker ps -a -q)
+   25  docker ps -a
+   26  docker images
+   27  vim docker-compose.yml
+   28  ll
+   29  docker-compose up -d
+   30  docker ps
+   31  docker-compose stop
+   32  docker ps
+   33  docker ps -a
+   34  docker-compose start
+   35  docker ps -a
+   36  docker-compose kill
+   37  docker ps -a
+   38  docker-compose rm
+   39  docker ps -a
+   40  docker-compose up -d
+   41  docker ps -a
+   42  docker-compose down
+   43  docker ps -a
+   44  docker-compose up -d
+   45  docker ps -a
+   46  docker-compose pause
+   47  docker ps -a
+   48  docker-compose unpause
+   49  docker run -itd --name cont1 ubuntu
+   50  docker run -itd --name cont2 ubuntu
+   51  docker run -itd --name cont3 ubuntu
+   52  docker run -itd --name cont4 ubuntu
+   53  docker ps -a
+   54* docker-compose top
+   55  top
+   56  docker top cont1
+   57  docker-compose top
+   58  docker-compose logs
+   59  docker-compose scale train=10
+   60  docker-compose ps
+   61  ll
+   62  mv docker-compose.yml raham.yml
+   63  rm -rf Dockerfile index.html
+   64  ll
+   65  docker-compose down
+   66  docker-compose -f raham.yml down
+   67  docker-compose -f raham.yml up -d
+   68  docker-compose -f raham.yml ps
+   69  vim raham.yml
+   70  docker volume create volume1
+   71  mv raham.yml docker-compose.yml
+   72  docker-compose up -d
+    1  docker images
+    2  docker tag movies:v1 venkatesh1826/movies
+    3  docker images
+    4  docker push venkatesh1826/movies
+    5  docker login
+    6  docker push venkatesh1826/movies
+    7  docker images
+    8  docker tag train:v1 venkatesh1826/train
+    9  docker push venkatesh1826/train
+   10  docker tag dth:v1 venkatesh1826/dth
+   11  docker push venkatesh1826/dth
+   12  docker tag recharge:v1 venkatesh1826/recharge
+   13  docker push venkatesh1826/recharge
+   14  docker history movies:v1
+   15  docker rmi -f $(docker images -q)
+   16  docker ps -a
+   17  docker-compose down
+   18  docker kill $(docker ps -a -q)
+   19  docker rm $(docker ps -a -q)
+   20  docker rmi -f $(docker images -q)
+   21  docker images
+   22  docker ps
+   23  docker ps -a
+   24  docker run -itd --name cont1 -p 81:80 venkatesh1826/movies:latest
+   25  history
+
