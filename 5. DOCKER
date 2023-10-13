@@ -546,3 +546,100 @@ HISTORY:
    24  docker run -itd --name cont1 -p 81:80 venkatesh1826/movies:latest
    25  history
 
+=======================================================================
+DAY-05: 13-10-2023
+DOCKER SWARM AND JENKINS
+
+DOCKER SWARM:
+HIGH AVAILABILITY: MORE THAN ONE SERVER IN DIFF AZ
+
+its an orchestration tool for containers.
+it is cluster used to manage containers.
+Cluster means group of servers.
+Cluster will have manager and worker nodes.
+Multiple servers will have same container.
+if we can access container from one server we can acces from another server.
+manager node will distribute containers worker node.
+worker node will maintain containers.
+
+
+SETUP: 
+1. CREATE 3 SERVERS AND INSTALL DOCKER
+2. SET HOSTNAMES (hostnamectl set-hostname manager/worker1/worker2)
+3. GO TO MANAGER NODE (docker swarm init) -- > copy token to all nodes
+4. docker node ls
+
+SERVICES:
+its used to manage containers in swarm.
+it will help to create replicas of containers.
+replica means copy of container.
+it will scale easily.
+it can self-heal (container -- > delete -- > recreate)
+
+docker service create --name movies --replicas 3 -p 81:80 venkatesh1826/movies:latest
+docker service ls
+docker service ps movies
+docker service inspect movies
+docker service scale movies=10
+docker service scale movies=3
+docker service rollback movies
+docker service logs movies
+docker service rm movies
+
+docker service create --name train --replicas 6 --publish 82:80 venkatesh1826/train:latest
+
+CLUSTER ACTIVITIES:
+
+docker swarm leave (worker node) -- > removes the worker from cluster
+docker node rm node-Id(Manager) -- > to remove the node which is on down status
+docker swarm joint-token manager
+
+docker run -it --name jenkins -p 8080:8080 jenkins/jenkins:lts
+
+HISTORY:
+ 1  docker swarm init
+    2  docker node ls
+    3  docker run -itd --name cont1 -p 81:80 venkatesh1826/movies:latest
+    4  docker ps -a
+    5  docker kill cont1
+    6  docker rm cont1
+    7  docker ps -a
+    8  docker service create --name movies --replicas 3 -p 81:80 venkatesh1826/movies:latest
+    9  docker ps -a
+   10  docker service ps movies
+   11  docker service ls
+   12  docker service inspect movies
+   13  docker service ps  movies
+   14  docker service create --name train --replicas 6 --publish 82:80 venkatesh1826/train:l                                                                                                                                                                                                                                                                                    atest
+   15  docker service ls
+   16  docker service ps train
+   17  docker service ls
+   18  docker ps -a
+   19  docker service ls
+   20  docker service l
+   21  docker service ls
+   22  docker ps -a
+   23  docker service scale movies=10
+   24  docker service ls
+   25  docker service ps movies
+   26  docker service scale movies=3
+   27  docker service rollback movies
+   28  docker service logs movies
+   29  docker service ls
+   30  docker service rm movies
+   31  docker service ls
+   32  docker node ls
+   33  docker node rm ni12vw6jp4japgh2twsfe47w8
+   34  docker node ls
+   35  docker node rm ao6es8j7qizty3a518enpghoo
+   36  docker node ls
+   37  docker node rm zrojyioso7kotb3c0ii5b98m9
+   38  docker node ls
+   39  docker ps
+   40  docker node ls
+   41  docker service ps movies
+   42  docker service ps train
+   43  docker service scale train=10
+   44  docker service
+   45  docker run -it --name jenkins -p 8080:8080 jenkins/jenkins:lts
+   46  history
