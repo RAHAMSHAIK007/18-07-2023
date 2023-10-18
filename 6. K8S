@@ -108,6 +108,12 @@ kubectl get pod -o wide
 kubectl describe pod pod1 
 kubectl delete pod pod1 
 
+Note: if we delete the pod we cant retrive the pod.
+so creating single pod is not a good practise in real time.
+single pod will get more and more load.
+so we need to create more than one pod.
+
+REPLICASET:
 
 HISTORY:
   1  sudo apt update -y
@@ -122,8 +128,8 @@ HISTORY:
    10  sudo mv minikube-linux-amd64 /usr/local/bin/minikube
    11  chmod +x /usr/local/bin/minikube
    12  minikube version
-   13  sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux                                                                                                                          /amd64/kubectl"
-   14  sudo curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/k                                                                                                                          ubectl.sha256"
+   13  sudo curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+   14  sudo curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
    15  sudo echo "$(cat kubectl.sha256) kubectl" | sha256sum --check
    16  sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
    17  sudo minikube start --driver=docker --force
@@ -150,3 +156,167 @@ HISTORY:
    38  kubectl describe pod pod1
    39  kubectl delete pod pod1
    40  history
+===========================================
+DAY-02: 18-10-2023
+REPLICASET, DEPLOYMENT & SCALING
+
+REPLICASET:
+it will create replicas of same pod.
+we can use same application with multiple pods.
+even if one pod is deleted automaticallly it will create another pod.
+it has self healing.
+depends on requirment we can scale the pods.
+
+LABELS: used to assing for pods to maintain them as single unit.
+
+kubectl api-resources
+
+vim abc.yml
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  labels:
+    app: train
+  name: train-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: train
+  template:
+    metadata:
+      labels:
+        app: train
+    spec:
+      containers:
+      - name: cont1
+        image: hpakala53/paytmtrain:latest
+
+kubectl create -f abc.yml
+
+kubectl get rs
+kubectl get po
+kubectl describe rs train-rs
+kubectl delete pod pod-name 
+kubectl get pod -l app=train
+
+kubectl scale rs/train-rs --replicas=10
+kubectl scale rs/train-rs --replicas=5
+LIFO: last pod will be deleted first 
+kubectl delete rs train-rs
+
+kubectl edit rs/train-rs -- > go and update image
+it will update on rs  : kubectl describe rs train-rs
+but it wont update on pods : kubectl describe pod
+
+DRAWBACKS:
+it will not update the images.
+we cant do rolling and rollback.
+
+DEPLOYMENT:
+deployment will do all activites like RS.
+it can also do  rolling and rollback of app.
+its higher level k8s object.
+
+deployment -- > replicaset -- > pod
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: train
+  name: train-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: train
+  template:
+    metadata:
+      labels:
+        app: train
+    spec:
+      containers:
+      - name: cont1
+        image: hpakala53/paytmtrain:latest
+
+
+kubectl get deploy
+kubectl get po
+kubectl describe deploy train-deploy
+kubectl get pod pod-name 
+
+kubectl edit rs/train-rs -- > go and update image
+
+kubectl scale deploy/train-deploy --replicas=10
+kubectl scale deploy/train-deploy --replicas=5
+LIFO: last pod will be deleted first 
+kubectl delete deploy train-deploy
+
+HISTORY:
+ 1  vim minikube.sh
+    2  sh minikube.sh
+    3  vim abc.yml
+    4  vim abc.yml
+    5  kubectl create -f abc.yml
+    6  kubectl get po
+    7  kubectl get po -o wide
+    8  kubectl describe pod pod1
+    9  kubectl delete pod pod1
+   10  kubectl api-resources
+   11  vim abc.yml
+   12  kubectl create -f abc.yml
+   13  cat abc.yml
+   14  vim abc.yml
+   15  cat abc.yml
+   16  kubectl create -f abc.yml
+   17  vim abc.yml
+   18  kubectl create -f abc.yml
+   19  vim abc.yml
+   20  kubectl create -f abc.yml
+   21  kubectl get rs
+   22  kubectl get po
+   23  kubectl get po --show-labels
+   24  kubectl delete pod train-rs-szdkb
+   25  kubectl get po
+   26  kubectl delete pod train-rs-n8x42
+   27  kubectl get po
+   28  kubectl get po --show-labels
+   29  kubectl get rs
+   30  kubectl get rs -o wide
+   31  kubectl describe rs train-rs
+   32  kubectl get po
+   33  kubectl scale rs/train-rs --replicas=10
+   34  kubectl get po
+   35  kubectl scale rs/train-rs --replicas=5
+   36  kubectl get po
+   37  kubectl scale rs/train-rs --replicas=3
+   38  kubectl get po
+   39  kubectl get rs
+   40  kubectl describe rs train-rs
+   41  kubectl describe pod
+   42  kubectl edit rs/train-rs
+   43  kubectl describe rs train-rs
+   44  kubectl describe pod
+   45  kubectl get po
+   46  kubectl delete rs train-rs
+   47  vim abc.yml
+   48  kubectl create -f abc.yml
+   49  kubectl get deploy
+   50  kubectl get rs
+   51  kubectl get po
+   52  kubectl scale deploy/train-rs --replicas=10\
+   53  kubectl get po
+   54  kubectl scale deploy/train-rs --replicas=3
+   55  kubectl get po
+   56  kubectl delete pod train-rs-54bfbb8cc9-ddb2m
+   57  kubectl get po
+   58  kubectl edit rs/train-rs
+   59  kubectl edit deploy/train-rs
+   60  kubectl get po
+   61  kubectl describe po
+   62  kubectl edit deploy/train-rs
+   63  kubectl get po
+   64  kubectl describe po
+   65  history
