@@ -320,3 +320,152 @@ HISTORY:
    63  kubectl get po
    64  kubectl describe po
    65  history
+==========================================================
+DAY-03: 19-10-2023
+KOPS, ADMIN ACTIVITIES & KUBECOLRO
+
+KOPS:
+it is used to create multi node cluster.
+it will have master and workers.
+its free and open source tool.
+its platfrom independent.
+it will make cluster creation automatically.
+currently it will support for AWS and GCP (others are in Beta stage)
+
+ADVANTAGES:
+automate infra creation.
+supports homegenius and hetrogenius clusters.
+cluster add-on.
+save time and work.
+generates terraform and CFT templates.
+
+INFRA: resources used to run our application on cloud.
+ex: Ec2, Alb, Vpc, Asg ----
+
+MAUNAL METHOD:
+
+STEP-1: CREATE IAM USER AND ATTACH TO EC2
+aws configure -- > provide the details
+
+STEP-2: INSTALL KUBECTL AND KOPS
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+wget https://github.com/kubernetes/kops/releases/download/v1.25.0/kops-linux-amd64
+chmod +x kops-linux-amd64 kubectl
+mv kubectl /usr/local/bin/kubectl
+mv kops-linux-amd64 /usr/local/bin/kops
+
+#vim .bashrc
+#export PATH=$PATH:/usr/local/bin/
+#source .bashrc
+
+STEP-3: CREATE A BUCKET TO STORE CLUSTER INFO
+aws s3api create-bucket --bucket ccitdevops20233.k8s.local --region us-east-1 
+aws s3api put-bucket-versioning --bucket ccitdevops20233.k8s.local --region us-east-1 --versioning-configuration Status=Enabled
+export KOPS_STATE_STORE=s3://ccitdevops20233.k8s.local
+
+SETP-4: CREATE A CLUSTER AND RUN
+kops create cluster --name rahams.k8s.local --zones us-east-1a --master-count=1 --master-size t2.medium --node-count=2 --node-size t2.micro
+kops update cluster --name rahams.k8s.local --yes --admin
+
+
+AUTOMATED SCRIPT:
+SETUPS:
+
+#vim .bashrc
+#export PATH=$PATH:/usr/local/bin/
+#source .bashrc
+
+
+#! /bin/bash
+aws configure
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+wget https://github.com/kubernetes/kops/releases/download/v1.25.0/kops-linux-amd64
+chmod +x kops-linux-amd64 kubectl
+mv kubectl /usr/local/bin/kubectl
+mv kops-linux-amd64 /usr/local/bin/kops
+
+aws s3api create-bucket --bucket ccitdevops20233.k8s.local --region us-east-1 
+aws s3api put-bucket-versioning --bucket ccitdevops20233.k8s.local --region us-east-1 --versioning-configuration Status=Enabled
+export KOPS_STATE_STORE=s3://ccitdevops20233.k8s.local
+kops create cluster --name rahams.k8s.local --zones us-east-1a --master-count=1 --master-size t2.medium --node-count=2 --node-size t2.micro
+kops update cluster --name rahams.k8s.local --yes --admin
+
+
+Suggestions:
+ * list clusters with: kops get cluster
+ * edit this cluster with: kops edit cluster ccitdevops20233.k8s.local
+ * edit your node instance group: kops edit ig --name=ccitdevops20233.k8s.local nodes-us-east-1a
+ * edit your master instance group: kops edit ig --name=ccitdevops20233.k8s.local master-us-east-1a
+
+
+ADMIN ACTIVITES:
+kops edit ig --name=ccitdevops2023.k8s.local nodes-us-east-1a
+kops update cluster --name rahams.k8s.local --yes --admin
+kops rolling-update cluster --yes
+
+kops edit ig --name=ccitdevops2023.k8s.local master-us-east-1a
+kops update cluster --name rahams.k8s.local --yes --admin
+kops rolling-update cluster --yes
+
+TO DELETE CLUSTER:
+kops delete cluster --name rahams.k8s.local --yes 
+
+KOPS commands are used for cluster activites.
+KUBECTL commands are used for resource activites.
+
+
+KUBECOLOR:
+
+wget https://github.com/hidetatz/kubecolor/releases/download/v0.0.25/kubecolor_0.0.25_Linux_x86_64.tar.gz
+tar -zxvf kubecolor_0.0.25_Linux_x86_64.tar.gz
+./kubecolor
+chmod +x kubecolor
+mv kubecolor /usr/local/bin/
+kubecolor get po
+
+HISTORY:
+ 1  aws configure
+    2  curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+    3  wget https://github.com/kubernetes/kops/releases/download/v1.25.0/kops-linux-amd64
+    4  chmod +x kops-linux-amd64 kubectl
+    5  mv kubectl /usr/local/bin/kubectl
+    6  mv kops-linux-amd64 /usr/local/bin/kops
+    7  kubectl version
+    8  kops version
+    9  vim .bashrc
+   10  source .bashrc
+   11  kubectl version
+   12  kops version
+   13  ll -al
+   14  aws s3api create-bucket --bucket ccitdevops2023.k8s.local --region us-east-1
+   15  aws s3api create-bucket --bucket ccitdevops20233.k8s.local --region us-east-1
+   16  aws s3api put-bucket-versioning --bucket ccitdevops20233.k8s.local --region us-east-1                                                                                                                                           --versioning-configuration Status=Enabled
+   17  export KOPS_STATE_STORE=s3://ccitdevops20233.k8s.local
+   18  kops create cluster --name rahams.k8s.local --zones us-east-1a --master-count=1 --mas                                                                                                                                          ter-size t2.medium --node-count=2 --node-size t2.micro
+   19  kops update cluster --name rahams.k8s.local --yes --admin
+   20   kops validate cluster --wait 10m
+   21  kops get cluster
+   22  kubectl get no
+   23  vim abc.yml
+   24  kubectl create -f abc.yml
+   25  kubectl get po
+   26  kubectl get po -o wide
+   27  kops edit ig --name=rahams.k8s.local nodes-us-east-1a
+   28  kops update cluster --name rahams.k8s.local --yes --admin
+   29  kops rolling-update cluster
+   30  kubectl get no
+   31  kops edit ig --name=rahams.k8s.local nodes-us-east-1a
+   32  kops update cluster --name rahams.k8s.local --yes --admin
+   33  kops rolling-update cluster
+   34  kops edit ig --name=rahams.k8s.local master-us-east-1a
+   35  kops update cluster --name rahams.k8s.local --yes --admin
+   36  kops rolling-update cluster
+   37  kubectl get po -o wide
+   38  wget https://github.com/hidetatz/kubecolor/releases/download/v0.0.25/kubecolor_0.0.25                                                                                                                                          _Linux_x86_64.tar.gz
+   39  tar -zxvf kubecolor_0.0.25_Linux_x86_64.tar.gz
+   40  ./kubecolor
+   41  chmod +x kubecolor
+   42  mv kubecolor /usr/local/bin/
+   43  kubecolor get po
+   49  kops delete cluster --name rahams.k8s.local --yes
+   50  history
