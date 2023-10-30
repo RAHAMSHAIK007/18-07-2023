@@ -1,0 +1,241 @@
+DAY-01: 30-10-2023 (INTRO, SETUP, FILES, VARIABLES, TARGET)
+TERRAFORM:
+
+INFRA: RESOURCES USED TO RUN OUR APPLICATION ON CLOUD.
+EX: EC2, VPC, ALB
+
+If we create infra manually
+1. Time consume
+2. Mistakes
+3. Tracking 
+
+
+Infra creation -- > Automate -- > Terraform 
+
+Terraform:
+its a free and opensource too1.
+its also called as Infra as a code(IAAC) too1.
+it is used to automate the infra creation.
+its platfrom independet.
+year: 2014
+language: GO lang
+who: Mitchel hasimoto
+Owned: Hashicorp
+
+HOW TO WORK:
+code (hcl) -- > execute -- > infra
+in terraform we use Hashicorp Configuration Language syntax to write the code.
+once we write the code we can reuse it for infra creation.
+we can resue the configuration files multiple times.
+
+
+ADVATNAGES:
+1. Time saving
+2. Automate
+3. Resource Tracking 
+4. Reusable
+5. easy mainatinace
+6. can create multiple resources
+
+
+CFT	: AWS
+ARM	: AZURE
+GDE	: GOOGLE
+TERRAFORM: AWS, AZURE, GCP, -----
+
+
+SETUP:
+
+apt update -y
+apt install awscli -y
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update && sudo apt install terraform
+terraform -v
+
+mkdir terraform
+cd terraform
+
+vim main.tf
+
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_instance" "one" {
+ami = "ami-03eb6185d756497f8"
+instance_type = "t2.micro"
+}
+
+
+Commands:
+terraform init	: to download provider plugins for resource craetion
+terraform plan  : to create execution plan
+terraform apply : to create resource by terraform
+terraform destroy: to delete resource 
+
++	: Creating
+-	: Deleting
+~	: Update
+
+state file:
+terrform state file is used to store resource current state information.
+it will contain end to end info of our resource.
+its very important file in terraform so we need to keep it safe and secure.
+if we lost that file we cant track the infra.
+
+terraform state list : to show total resources inside state file
+
+
+
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_instance" "one" {
+count = 5
+ami = "ami-03eb6185d756497f8"
+instance_type = "t2.micro"
+}
+
+terraform apply --auto-approve
+terraform destroy --auto-approve
+
+target: used to delete a specific resource
+Single target: terraform destroy -target=aws_instance.one[0]
+Multi target: terraform destroy -target=aws_instance.one[1] -target=aws_instance.one[2]
+
+variable:
+its a block in yterraform used to define the variables
+why -- > when the values change frequenlty we use vars
+
+vim main.tf
+
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_instance" "one" {
+count = var.instance_count
+ami = var.ami_id
+instance_type = var.instance_type
+}
+
+variable "instance_type" {
+description = "*"
+type = string
+default = "t2.large"
+}
+
+variable "instance_count" {
+description = "*"
+type = number
+default = 5
+}
+
+variable "ami_id" {
+description = "*"
+type = string
+default = "ami-0dbc3d7bc646e8516"
+}
+
+terraform apply --auto-approve
+terraform destroy --auto-approve
+
+Variable.tf files:
+In terraform all tyhe varibales we can store on seperatefiles.
+it makes opur work easy to avoid confusion.
+
+vim main.tf
+
+provider "aws" {
+region = "us-east-1"
+}
+
+resource "aws_instance" "one" {
+count = var.instance_count
+ami = var.ami_id
+instance_type = var.instance_type
+}
+
+vim variable.tf
+
+variable "instance_type" {
+description = "*"
+type = string
+default = "t2.large"
+}
+
+variable "instance_count" {
+description = "*"
+type = number
+default = 5
+}
+
+variable "ami_id" {
+description = "*"
+type = string
+default = "ami-0dbc3d7bc646e8516"
+}
+
+terraform apply --auto-approve
+terraform destroy --auto-approve
+
+HISTORY:
+ 1  apt update -y
+    2  wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/has      hicorp-archive-keyring.gpg
+    3  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.ha      shicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    4  sudo apt update && sudo apt install terraform
+    5  terraform -v
+    6  aws configure
+    7  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    8  unzip awscliv2.zip
+    9  sudo ./aws/install
+   10  apt install unzip -y
+   11  unzip awscliv2.zip
+   12  sudo ./aws/install
+   13  /usr/local/bin/aws --version
+   14  aws configure
+   15  ls -al
+   16  cd .aws/
+   17  ll
+   18  vim config
+   19  cd
+   20  ls -al
+   21  mkdir terraform
+   22  cd terraform/
+   23  vim main.tf
+   24  terraform init
+   25  ll
+   26  cat .terraform.lock.hcl
+   27  ll
+   28  terraform plan
+   29  terraform apply
+   30  ll
+   31  cat terraform.tfstate
+   32  terraform state list
+   33  cat main.tf
+   34  terraform destroy
+   35  vim main.tf
+   36  terraform plan
+   37  terraform apply --auto-approve
+   38  terraform state list
+   39  cat main.tf
+   40  terraform destroy --auto-approve
+   41  terraform state list
+   42  terraform apply --auto-approve
+   43  terraform state list
+   44  terraform destroy --auto-approve -target=aws_instance.one[0]
+   45  terraform state list
+   46  terraform destroy --auto-approve -target=aws_instance.one[1] -target=aws_instance.one[4]
+   47  terraform destroy --auto-approve
+   48  vim main.tf
+   49  terraform apply
+   50  terraform destroy
+   51  vim main.tf
+   52  vim variable.tf
+   53  cat main.tf
+   54  cat variable.tf
+   55  terraform apply --auto-approve
+   56  terraform state list
+   57  terraform destroy --auto-approve
