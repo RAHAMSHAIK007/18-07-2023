@@ -239,3 +239,216 @@ HISTORY:
    55  terraform apply --auto-approve
    56  terraform state list
    57  terraform destroy --auto-approve
+
+====================================================
+
+DAY-02: 31-10-2023
+
+TFVARS, CLI, OUTPUTS, IMPORT, RESOURCES, TAINT
+
+TERRAFORM TFVARS:
+we use tfvar files when we have multiple conifurations.
+each configuration we can write on variable file and attach it while running.
+
+cat main.tf
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+ami = var.ami_id
+instance_type = var.instance_type
+tags = {
+Name = var.instance_name
+}
+}
+
+
+cat variable.tf
+variable "ami_id" {
+}
+
+variable "instance_type" {
+}
+
+variable "instance_name" {
+}
+
+cat dev.tfvars
+ami_id = "ami-03caf91bb3d81b843"
+
+instance_type = "t2.micro"
+
+instance_name = "dev-server"
+
+cat test.tfvars
+ami_id = "ami-0a1aabd978d1ea0a5"
+
+instance_type = "t2.medium"
+
+instance_name = "test-server"
+
+terraform apply --auto-approve  -var-file="dev.tfvars"
+terraform destroy --auto-approve  -var-file="dev.tfvars"
+terraform apply --auto-approve  -var-file="test.tfvars"
+terraform destroy --auto-approve  -var-file="test.tfvars"
+
+TERRAFORM CLI: used to pass the variables values from cli during runtime.
+
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+ami = "ami-0a1aabd978d1ea0a5"
+instance_type = var.instance_type
+tags = {
+Name = "raham"
+}
+}
+
+variable "instance_type" {
+}
+
+terraform apply --auto-approve -var="instance_type=t2.medium"
+terraform destroy --auto-approve -var="instance_type=t2.medium"
+
+TERRAFORM OUTPUT:
+this block is used to print the resource outputs.
+ex: public ip, dns, ebs -------
+
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+ami = "ami-0a1aabd978d1ea0a5"
+instance_type = "t2.micro"
+tags = {
+Name = "raham"
+}
+}
+
+output "abc" {
+value = [aws_instance.one.public_ip, aws_instance.one.private_ip, aws_instance.one.public_dns]
+}
+
+TERRAFORM IMPORT: used to track the resource which is created outside of terraform.
+
+cat main.tf
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+}
+
+terraform import aws_instance.one i-02366c0cb62440bbb[instance-id]
+
+
+provider "aws" {
+}
+
+resource "aws_instance" "one" {
+ami = "ami-0a1aabd978d1ea0a5"
+instance_type = "t2.micro"
+tags = {
+Name = "raham"
+}
+}
+
+resource "aws_s3_bucket" "two" {
+bucket = "sudheer887766prodbucket"
+}
+
+resource "aws_ebs_volume" "three" {
+size = 20
+availability_zone = "ap-southeast-1a"
+tags = {
+Name = "raham-ebs"
+}
+}
+
+resource "aws_iam_user" "four" {
+name = "rahams"
+}
+
+resource "aws_iam_group" "five" {
+name = "devops"
+}
+
+
+TAINT: it is used to recreate specific objects.
+when: in real time some resource might have chances to crash 
+son in that insted of creating that resource manually we can use taint command
+
+
+terraform state list
+terraform taint aws_instance.one
+terraform apply --auto-approve
+
+HISTORY:
+ 1  wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyring                                                        s/hashicorp-archive-keyring.gpg
+    2  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releas                                                        es.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+    3  sudo apt update && sudo apt install terraform
+    4  apt install awscli -y
+    5  aws configure
+    6  mkdir terrafor
+    7  cd terrafor/
+    8  vim main.tf
+    9  vim variable.tf
+   10  cat main.tf
+   11  vim dev.tfvars
+   12  vim test.tfvars
+   13  cat main.tf
+   14  cat variable.tf
+   15  cat dev.tfvars
+   16  cat test.tfvars
+   17  terraform init
+   18  terraform plan
+   19  terraform plan -var-file="dev.tfvars"
+   20  terraform apply --auto-approve  -var-file="dev.tfvars"
+   21  terraform state list
+   22  terraform destroy --auto-approve  -var-file="dev.tfvars"
+   23  cd
+   24  vim .aws/credentials
+   25  cd terrafor/
+   26  terraform apply --auto-approve  -var-file="dev.tfvars"
+   27  terraform destroy --auto-approve  -var-file="dev.tfvars"
+   28  terraform apply --auto-approve  -var-file="test.tfvars"
+   29  terraform destroy --auto-approve  -var-file="test.tfvars"
+   30  rm -rf dev.tfvars test.tfvars variable.tf
+   31  vim main.tf
+   32  cat main.tf
+   33  terraform apply --auto-approve -var="instance_type=t2.medium"
+   34  terraform destroy --auto-approve -var="instance_type=t2.medium"
+   35  terraform apply --auto-approve
+   36  terraform destroy --auto-approve
+   37  vim main.tf
+   38  terraform apply --auto-approve
+   39  vim main.tf
+   40  terraform apply --auto-approve
+   41  vim main.tf
+   42  terraform apply --auto-approve
+   43  terraform destroy --auto-approve
+   44  vim main.tf
+   45  cat terraform.tfstate
+   46  terraform state list
+   47  cat main.tf
+   48  terraform import aws_instance.one i-02366c0cb62440bbb
+   49  terraform state list
+   50  cat terraform.tfstate
+   51  cat -n terraform.tfstate
+   52  terraform destroy --auto-approve
+   53  vim main.tf
+   54  terraform apply --auto-approve
+   55  terraform state list
+   56  cat main.tf
+   57  terraform state list
+   58  terraform apply --auto-approve
+   59  terraform state list
+   60  terraform taint aws_instance.one
+   61  terraform apply --auto-approve
+   62  terraform state list
+   63  terraform taint aws_s3_bucket.two
+   64  terraform taint aws_iam_user.four
+   65  terraform taint aws_iam_group.five
+   66  terraform untaint aws_iam_group.five
+   67  terraform apply --auto-approve
+   68  history
