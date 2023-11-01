@@ -452,3 +452,253 @@ HISTORY:
    66  terraform untaint aws_iam_group.five
    67  terraform apply --auto-approve
    68  history
+
+==========================================================
+DAY-03: 1-11-2023
+
+LOCALS, WORKSPACES, GRAPH AND BACKEND SETUP
+TERRAFORM LOCALS:
+its a blcok used to define values 
+once we define a value we can use it multipple times.
+if you change value on local block all the values will be replaced to all block.
+
+
+provider "aws" {
+}
+
+locals {
+env = "prod"
+}
+
+resource "aws_vpc" "one" {
+cidr_block = "10.0.0.0/16"
+tags = {
+Name = "${local.env}-vpc"
+}
+}
+
+resource "aws_subnet" "two" {
+vpc_id = aws_vpc.one.id
+cidr_block = "10.0.0.0/24"
+availability_zone = "ap-southeast-2a"
+tags = {
+Name = "${local.env}-subnet"
+}
+}
+
+resource "aws_instance" "three" {
+subnet_id = aws_subnet.two.id
+ami = "ami-0cb441cf7bb9cba22"
+instance_type = "t2.micro"
+tags = {
+Name = "${local.env}-server"
+}
+}
+
+
+TERRAFORM WORKSPACE:
+Workspace: its a place where we write our code.
+It is used to isloate the resources.
+all the commands will work on workspace only.
+without workspace we cant run commands and we cant create resources.
+
+in real time we create diff workspaces for diff envs.
+each env is isloated with another env with help of workspaces.
+no need to write multiple config files, just chane the values
+
+NOTE:
+WE CANT DELETE CURRENT WORKSPACE.
+BEFOR DELETING WORKSPACE WE NEED TO DELETE RESOURCES ON IT.
+WE CANT DELETE DAFAULT WORKSPACE
+
+COMMANDS:
+terraform workspace list	: to show list of workspace
+terraform workspace new dev	: to Create and switch to workspace "dev"
+terraform workspace show	: to show current workspace
+terraform workspace select test	: to switch blw workspaces
+terraform workspace delete test	: to delete the workspaces
+
+
+provider "aws" {
+}
+
+locals {
+env = "${terraform.workspace}"
+}
+
+resource "aws_vpc" "one" {
+cidr_block = "10.0.0.0/16"
+tags = {
+Name = "${local.env}-vpc"
+}
+}
+
+resource "aws_subnet" "two" {
+vpc_id = aws_vpc.one.id
+cidr_block = "10.0.0.0/24"
+availability_zone = "ap-southeast-2c"
+tags = {
+Name = "${local.env}-subnet"
+}
+}
+
+resource "aws_instance" "three" {
+subnet_id = aws_subnet.two.id
+ami = "ami-0cb441cf7bb9cba22"
+instance_type = "t2.large"
+tags = {
+Name = "${local.env}-server"
+}
+}
+
+Terraform fmt: used to set the indentation for terraform files.
+Terraform Graph: to show the blue frint of infra.
+terraform graph : copy the code and past it on 
+graphwiz online 
+
+
+TERRAFORM BACKEND SETUP:
+in real time state file we need to keep backup and secure on remote laction.
+for that purpose we need to use s3.
+the state file will be store on s3 for saftey.
+if state file we lost on local we can retrive from s3
+
+Create a bucket manually.
+
+provider "aws" {
+}
+
+terraform {
+  backend "s3" {
+    bucket = "rahamterraoprodbucket9988"
+    key    = "prod/terraform.tfstate"
+    region = "ap-southeast-2"
+  }
+}
+
+locals {
+  env = terraform.workspace
+}
+
+resource "aws_vpc" "one" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "${local.env}-vpc"
+  }
+}
+
+resource "aws_subnet" "two" {
+  vpc_id            = aws_vpc.one.id
+  cidr_block        = "10.0.0.0/24"
+  availability_zone = "ap-southeast-2c"
+  tags = {
+    Name = "${local.env}-subnet"
+  }
+}
+
+resource "aws_instance" "three" {
+  subnet_id     = aws_subnet.two.id
+  ami           = "ami-0cb441cf7bb9cba22"
+  instance_type = "t2.large"
+  tags = {
+    Name = "${local.env}-server"
+  }
+}
+
+resource "aws_ebs_volume" "three" {
+  size              = 20
+  availability_zone = "ap-southeast-2a"
+  tags = {
+    Name = "raham-ebs"
+  }
+}
+
+resource "aws_iam_user" "four" {
+  name = "rahams"
+}
+
+resource "aws_iam_group" "five" {
+  name = "devops"
+}
+
+HISTORY:
+ 69  terraform destroy --auto-approve
+   70  vim main.tf
+   71  cd
+   72  vim .aws/config
+   73  cd terrafor/
+   74  terraform apply --auto-approve
+   75  terraform destroy --auto-approve
+   76  cd terrafor/
+   77  ll
+   78  vim main.tf
+   79  terraform init
+   80  terraform plan
+   81  terraform plan -out
+   82  terraform plan -help
+   83  terraform apply --auto-approve
+   84  vim main.tf
+   85  terraform apply --auto-approve
+   86  terraform state list
+   87  vim main.tf
+   88  terraform apply --auto-approve
+   89  vim main.tf
+   90  terraform apply --auto-approve
+   91  terraform destroy --auto-approve
+   92  vim main.tf
+   93  terraform workspace list
+   94  terraform workspace new dev
+   95  vim main.tf
+   96  terraform apply --auto-approve
+   97  terraform state list
+   98  terraform workspace new test
+   99  terraform workspace list
+  100  terraform workspace show
+  101  vim main.tf
+  102  terraform apply --auto-approve
+  103  terraform workspace new prod
+  104  vim main.tf
+  105  terraform apply --auto-approve
+  106  terraform workspace delete prod
+  107  terraform workspace select test
+  108  terraform workspace show
+  109  terraform workspace delete prod
+  110  terraform workspace select prod
+  111  terraform state list
+  112  terraform destroy --auto-approve
+  113  terraform workspace select test
+  114  terraform workspace delete prod
+  115  terraform workspace list
+  116  terraform destroy --auto-approve
+  117  terraform workspace select dev
+  118  terraform workspace delete test
+  119  terraform graph
+  120  terraform destroy --auto-approve
+  121  terraform workspace select default
+  122  terraform workspace delete dev
+  123  terraform workspace list
+  124  terraform workspace delete default
+  125  cat main.tf
+  126  terraform fmt
+  127  cat main.tf
+  128  terraform workspace list
+  129  terraform state list
+  130  vim main.tf
+  131  terraform init
+  132  terraform apply --auto-approve
+  133  ll
+  134  cat -n terraform.tfstate
+  135  cat -n terraform.tfstate.
+  136  cat -n terraform.tfstate.backup
+  137  ll
+  138  vim main.tf
+  139  terraform fmt
+  140  terraform apply --auto-approve
+  141  vim main.tf
+  142  terraform apply --auto-approve
+  143  cat -n terraform.tfstate.backup
+  144  terraform destroy --auto-approve
+  145  cat -n terraform.tfstate.backup
+  146  cat terraform.tfstate
+  147  cat main.tf
+  148  history
