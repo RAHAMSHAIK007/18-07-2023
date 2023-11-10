@@ -1130,3 +1130,26 @@ last 2 days
   110  vim main.tf
   111  terraform apply --auto-approve
   112  history
+====================
+ALIAS AND PROVIDER:
+
+10-11-2023:
+provider "aws" {
+region = "ap-southeast-1"
+}
+
+resource "aws_instance" "one" {
+ami = "ami-05caa5aa0186b660f"
+instance_type = "t2.micro"
+}
+
+provider "aws" {
+region = "ap-south-1"
+alias = "south"
+}
+
+resource "aws_instance" "two" {
+provider = aws.south
+ami = "ami-02e94b011299ef128"
+instance_type = "t2.micro"
+}
